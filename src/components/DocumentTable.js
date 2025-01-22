@@ -89,22 +89,22 @@ function DocumentTable() {
                             <TableData width={90}>{item.name}</TableData>
                             <TableData width={150}>{item.department}</TableData>
                             <TableData width={120}>{item.phone}</TableData>
-                            {/*{item.documents.map((info) => (
-                                <TableData width={130} key={info.id}>
+                            {item.documents.map(({document_type, status, id}) => (
+                                <TableData width={130} key={id}>
                                     <Button onClick={() => {
+                                        setDocumentId(id);
                                         setIsModalOpen(true);
-                                        setDocumentId(info.id);
                                     }}>
-                                        {info.status}
+                                        {status}
                                     </Button>
                                 </TableData>
-                            ))}*/}
+                            ))}
                         </TableRow>
                     ))}
                 </tbody>
             </Table>
             {isModalOpen && (
-                <DocumentModal isModalOpen={isModalOpen} closeModal={closeModal}/>
+                <DocumentModal isModalOpen={isModalOpen} closeModal={closeModal} documentId={documentId} />
             )}
         </>
     );

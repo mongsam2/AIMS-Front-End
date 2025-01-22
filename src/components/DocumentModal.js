@@ -17,7 +17,7 @@ const CloseButton = styled.button`
   }
 `;
 
-function DocumentModal({isModalOpen, closeModal}) {
+function DocumentModal({isModalOpen, closeModal, documentId}) {
 
     return (
         <Modal
@@ -35,7 +35,7 @@ function DocumentModal({isModalOpen, closeModal}) {
               },
             }}
         >
-            <h2>Document Details</h2>
+            <h2>{documentId} 서류</h2>
             <CloseButton onClick={closeModal}>Close</CloseButton>
         </Modal>
     );
