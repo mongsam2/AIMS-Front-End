@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components'
 import axios from 'axios';
+import DocumentModal from './DocumentModal';
 
 const Table = styled.table`
     width: 100%;
@@ -33,9 +34,16 @@ const TableData = styled.td`
     font-weight: regular;
 `;
 
+const Button = styled.button`
+    background-color: ${(props) => props.color};
+`;
+
 
 function DocumentTable() {
     const [data, setDate] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [documentId, setDocumentId] = useState(null);
+
     const loadData = async () => {
         const response = await axios.get('http://127.0.0.1:8000/api/applicants/');
         console.log(response.data.results);
@@ -45,38 +53,60 @@ function DocumentTable() {
         loadData();
     }, []);
 
+    const openModal = (document) => {
+        //setSelectedDocument(document);
+        setIsModalOpen(true);
+      };
+    
+    const closeModal = () => {
+      setIsModalOpen(false);
+      //setSelectedDocument(null);
+    };
+
     return (
-        <Table>
-            <thead>
-                <TableRow>
-                    <TableHeader width={90}>수험번호</TableHeader>
-                    <TableHeader width={90}>이름</TableHeader>
-                    <TableHeader width={150}>학과</TableHeader>
-                    <TableHeader width={120}>전화번호</TableHeader>
-                    <TableHeader width={130}>학생생활기록부</TableHeader>
-                    <TableHeader width={130}>검정고시합격증명서</TableHeader>
-                    <TableHeader width={130}>생활기록부대체양식</TableHeader>
-                    <TableHeader width={130}>기초생활수급자증명서</TableHeader>
-                    <TableHeader width={130}>주민등록본</TableHeader>
-                    <TableHeader width={130}>국민체력100인증서</TableHeader>
-                    <TableHeader width={130}>체력평가</TableHeader>
-                    <TableHeader width={130}>논술</TableHeader>
-                </TableRow>
-            </thead>
-            <tbody>
-                {data.map((item) => (
-                    <TableRow key={item.student_id}>
-                        <TableData width={90}>{item.student_id}</TableData>
-                        <TableData width={90}>{item.name}</TableData>
-                        <TableData width={150}>{item.department}</TableData>
-                        <TableData width={120}>{item.phone}</TableData>
-                        {Object.values(item.documents).map((status) => (
-                            <TableData width={130}>{status}</TableData>
-                        ))}
+        <>
+            <Table>
+                <thead>
+                    <TableRow>
+                        <TableHeader width={90}>수험번호</TableHeader>
+                        <TableHeader width={90}>이름</TableHeader>
+                        <TableHeader width={150}>학과</TableHeader>
+                        <TableHeader width={120}>전화번호</TableHeader>
+                        <TableHeader width={130}>학생생활기록부</TableHeader>
+                        <TableHeader width={130}>검정고시합격증명서</TableHeader>
+                        <TableHeader width={130}>생활기록부대체양식</TableHeader>
+                        <TableHeader width={130}>기초생활수급자증명서</TableHeader>
+                        <TableHeader width={130}>주민등록본</TableHeader>
+                        <TableHeader width={130}>국민체력100인증서</TableHeader>
+                        <TableHeader width={130}>체력평가</TableHeader>
+                        <TableHeader width={130}>논술</TableHeader>
                     </TableRow>
-                ))}
-            </tbody>
-        </Table>
+                </thead>
+                <tbody>
+                    {data.map((item) => (
+                        <TableRow key={item.student_id}>
+                            <TableData width={90}>{item.student_id}</TableData>
+                            <TableData width={90}>{item.name}</TableData>
+                            <TableData width={150}>{item.department}</TableData>
+                            <TableData width={120}>{item.phone}</TableData>
+                            {/*{item.documents.map((info) => (
+                                <TableData width={130} key={info.id}>
+                                    <Button onClick={() => {
+                                        setIsModalOpen(true);
+                                        setDocumentId(info.id);
+                                    }}>
+                                        {info.status}
+                                    </Button>
+                                </TableData>
+                            ))}*/}
+                        </TableRow>
+                    ))}
+                </tbody>
+            </Table>
+            {isModalOpen && (
+                <DocumentModal isModalOpen={isModalOpen} closeModal={closeModal}/>
+            )}
+        </>
     );
 }
 

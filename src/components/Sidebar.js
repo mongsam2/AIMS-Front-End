@@ -1,13 +1,7 @@
-import React, { useRef } from "react";
+import React from "react";
 import {Link} from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import "../styles/DocumentReview.css";
-import "../styles/top_side_bar.css";
 import logo from "../assets/aims_logo.png";
 import icon from "../assets/file.png";
-import refreshicon from "../assets/update_icon.png";
-import helpicon from "../assets/help_icon.png";
-import searchicon from "../assets/search_icon.png";
 
 import styled from 'styled-components'
 
