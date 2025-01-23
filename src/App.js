@@ -6,6 +6,7 @@ import StudentRecord from "./pages/StudentRecord";
 import DocumentReview from "./pages/DocumentReview";
 import EssayTest from "./pages/EssayTest";
 import Login from "./pages/Login";
+import Admin from "./pages/Admin";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/document-review" element={<DocumentReview />} />
         <Route path="/student-record" element={<StudentRecord />} />
         <Route path="/essay-test" element={<EssayTest />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
     </Router>
   );
