@@ -103,7 +103,6 @@ function AdminPageContentElement({}) {
   const handleFileChange = async(event, type) => {
     const files = event.target.files;
     // 각 타입에 따라 다른 로직을 구현합니다.
-    if (type === "document") {
       for (let i = 0; i < files.length; i++) {
         try {
           await axios.post(
@@ -117,15 +116,6 @@ function AdminPageContentElement({}) {
           console.log(`${files[i].name} 파일이름 양식이 올바르지 않습니다.`);
         }
       }
-      // 입학 서류 업로드 로직
-      console.log("Document files:", files);
-    } else if (type === "studentRecord") {
-      // 생활기록부 업로드 로직
-      console.log("Student record files:", files);
-    } else if (type === "essay") {
-      // 논술 업로드 로직
-      console.log("Essay files:", files);
-    }
   };
 
   return (
