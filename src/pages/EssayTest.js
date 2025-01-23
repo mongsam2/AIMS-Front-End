@@ -1,18 +1,29 @@
-import Header from "../components/Header";
-import Sidebar from "../components/Sidebar";
-import EssayTable from "../components/EssayTable";
-import { Container, Content } from "../components/Layout";
-
-const StudentRecord = () => {
+import {
+    Container,
+    MainContent,
+    EssayTestContent,
+  } from "../components/common/Layout";
+  import Header from "../components/common/Header";
+  import ApplicantTable from "../components/common/ApplicantTable";
+  import EssayTestPDFViewer from "../components/essay-test/EssayTestPDFViewer";
+  import EssayTestEvaluation from "../components/essay-test/EssayTestEvaluation";
+  import Sidebar from "../components/common/Sidebar";
+  
+  function EssayTest() {
     return (
-        <Container>
-            <Sidebar />
-            <Content>
-                <Header title={"논술"} />
-                <EssayTable />
-            </Content>
-        </Container>
+      <Container>
+        <Sidebar />
+        <MainContent>
+          <Header title="논술 채점" />
+          <EssayTestContent>
+            <ApplicantTable />
+            <EssayTestPDFViewer />
+            <EssayTestEvaluation />
+          </EssayTestContent>
+        </MainContent>
+      </Container>
     );
-}
-
-export default StudentRecord;
+  }
+  
+  export default EssayTest;
+  
