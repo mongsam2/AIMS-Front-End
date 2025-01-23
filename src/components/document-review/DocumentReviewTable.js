@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import DocumentReviewPopUp from "./DocumentReviewPopUp";
 
 const TableContainer = styled.div`
   width: 100%;
@@ -25,17 +26,32 @@ const TableHeader = styled.div`
   height: 5%;
 `;
 
+const TableCellHeader = styled.div`
+  width: ${({ width }) => width || "auto"};
+  height: 100%;
+  border: 1px solid #f7f9fc;
+  box-sizing: border-box;
+  font-weight: 500;
+  font-size: 1.2rem;
+  color: ${({ color }) => color || "rgba(0, 0, 0, 0.9)"};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: ${({ bgColor }) => bgColor || "#F7F9FCCC"};
+`;
+
 const TableCell = styled.div`
   width: ${({ width }) => width || "auto"};
   height: 100%;
   border: 1px solid #f7f9fc;
   box-sizing: border-box;
   font-weight: 500;
-  color: ${({ color }) => color || "rgba(0, 0, 0, 0.6)"};
+  font-size: 1.2rem;
+  color: ${({ color }) => color || "rgba(0, 0, 0, 0.7)"};
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: ${({ bgColor }) => bgColor || "#f9fafd"};
+  background-color: ${({ bgColor }) => bgColor || "white"};
 `;
 
 const TableBody = styled.div`
@@ -64,11 +80,33 @@ const TableButton = styled.button`
   cursor: pointer;
 `;
 
+function getButtonStyles(status) {
+  switch (status) {
+    case "미제출":
+      return { bgColor: "#ffedef", color: "#ef5466" };
+    case "검토":
+      return { bgColor: "#fcf2e6", color: "#c97a20" };
+    case "제출":
+      return { bgColor: "#e1fcef", color: "#38a06c" };
+    case "해당없음":
+      return { bgColor: "#f9fafd", color: "rgba(0, 0, 0, 0.6)" };
+    default:
+      return { bgColor: "#f9fafd", color: "rgba(0, 0, 0, 0.6)" };
+  }
+}
+
 function DocumentReviewTable() {
   const [tableData, setTableData] = useState([]);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  const handleExamineButtonClick = () => {
-    // 팝업 열기 로직
+  const handleExamineButtonClick = (status) => {
+    if (status === "검토" || status === "제출") {
+      setIsPopupOpen(true);
+    }
+  };
+
+  const handleClosePopup = () => {
+    setIsPopupOpen(false);
   };
 
   const handleCheckboxChange = (event, index) => {
@@ -80,20 +118,30 @@ function DocumentReviewTable() {
 
   const loadData = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/applicants/");
-      const results = response.data.results.map((item) => ({
-        id: item.student_id,
-        name: item.name,
-        department: item.department,
-        phone: item.phone,
-        record: "생활기록부",
-        exam: "검토",
-        foreignSchool: "검토",
-        basicLiving: "검토",
-        lowIncome: "검토",
-        rural: "",
-        isChecked: false,
-      }));
+      const response = await axios.get("http://3.37.240.199/api/applicants/");
+      const results = response.data.results.map((item) => {
+        const documentStatus = item.documents.reduce((acc, doc) => {
+          acc[doc.document_type] = doc.status;
+          return acc;
+        }, {});
+
+        return {
+          id: item.student_id,
+          name: item.name,
+          department: item.department,
+          phone: item.phone,
+          record: documentStatus["학생생활기록부"] || "해당없음",
+          exam: documentStatus["검정고시합격증명서"] || "해당없음",
+          record_replacement:
+            documentStatus["생활기록부대체양식"] || "해당없음",
+          basicLiving: documentStatus["기초생활수급자증명서"] || "해당없음",
+          identity_file: documentStatus["주민등록본"] || "해당없음",
+          physical_100_file: documentStatus["국민체력100인증서"] || "해당없음",
+          physical_100_result: documentStatus["체력평가"] || "해당없음",
+          isChecked: false,
+        };
+      });
+
       setTableData(results);
     } catch (error) {
       console.error("데이터 로드 실패:", error);
@@ -105,83 +153,109 @@ function DocumentReviewTable() {
   }, []);
 
   return (
-    <TableContainer>
-      <ReviewTable>
-        <TableHeader>
-          <TableCell width="4%">
-            <input type="checkbox" className="table-checkbox" />
-          </TableCell>
-          <TableCell width="9%">수험번호</TableCell>
-          <TableCell width="7%">이름</TableCell>
-          <TableCell width="15%">학과</TableCell>
-          <TableCell width="10%">전화번호</TableCell>
-          <TableCell width="10%">학생생활기록부</TableCell>
-          <TableCell width="10%">검정고시</TableCell>
-          <TableCell width="10%">국외고등학교</TableCell>
-          <TableCell width="10%">기초생활수급자</TableCell>
-          <TableCell width="10%">차상위 계층</TableCell>
-          <TableCell width="10%">농어촌확인서</TableCell>
-        </TableHeader>
-        <TableBody>
-          {tableData.map((row, index) => (
-            <TableRow key={index} isChecked={row.isChecked}>
-              <TableCell width="4%">
-                <input
-                  type="checkbox"
-                  className="table-checkbox"
-                  checked={row.isChecked}
-                  onChange={(event) => handleCheckboxChange(event, index)}
-                />
-              </TableCell>
-              <TableCell width="9%">{row.id}</TableCell>
-              <TableCell width="7%">{row.name}</TableCell>
-              <TableCell width="15%">{row.department}</TableCell>
-              <TableCell width="10%">{row.phone}</TableCell>
-              <TableCell width="10%">
-                <TableButton bgColor="#e1fcef" color="#38a06c">
-                  {row.record}
-                </TableButton>
-              </TableCell>
-              <TableCell width="10%">
-                <TableButton bgColor="#ffedef" color="#ef5466">
-                  {row.exam}
-                </TableButton>
-              </TableCell>
-              <TableCell width="10%">
-                <TableButton
-                  bgColor="#fcf2e6"
-                  color="#c97a20"
-                  onClick={handleExamineButtonClick}
-                >
-                  {row.foreignSchool}
-                </TableButton>
-              </TableCell>
-              <TableCell width="10%">
-                <TableButton
-                  bgColor="#fcf2e6"
-                  color="#c97a20"
-                  onClick={handleExamineButtonClick}
-                >
-                  {row.basicLiving}
-                </TableButton>
-              </TableCell>
-              <TableCell width="10%">
-                <TableButton
-                  bgColor="#fcf2e6"
-                  color="#c97a20"
-                  onClick={handleExamineButtonClick}
-                >
-                  {row.lowIncome}
-                </TableButton>
-              </TableCell>
-              <TableCell width="10%">
-                <TableButton>{row.rural}</TableButton>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </ReviewTable>
-    </TableContainer>
+    <>
+      <TableContainer>
+        <ReviewTable>
+          <TableHeader>
+            <TableCellHeader width="4%">
+              <input type="checkbox" className="table-checkbox" />
+            </TableCellHeader>
+            <TableCellHeader width="9%">수험번호</TableCellHeader>
+            <TableCellHeader width="7%">이름</TableCellHeader>
+            <TableCellHeader width="15%">학과</TableCellHeader>
+            <TableCellHeader width="10%">전화번호</TableCellHeader>
+            <TableCellHeader width="10%">학생생활기록부</TableCellHeader>
+            <TableCellHeader width="10%">검정고시합격증명서</TableCellHeader>
+            <TableCellHeader width="10%">생활기록부대체양식서</TableCellHeader>
+            <TableCellHeader width="10%">기초생활수급자증명서</TableCellHeader>
+            <TableCellHeader width="10%">주민등록표초본</TableCellHeader>
+            <TableCellHeader width="10%">국민체력100인증서</TableCellHeader>
+            <TableCellHeader width="10%">체력평가결과지</TableCellHeader>
+          </TableHeader>
+          <TableBody>
+            {tableData.map((row, index) => (
+              <TableRow key={index} isChecked={row.isChecked}>
+                <TableCell width="4%">
+                  <input
+                    type="checkbox"
+                    className="table-checkbox"
+                    checked={row.isChecked}
+                    onChange={(event) => handleCheckboxChange(event, index)}
+                  />
+                </TableCell>
+                <TableCell width="9%">{row.id}</TableCell>
+                <TableCell width="7%">{row.name}</TableCell>
+                <TableCell width="15%">{row.department}</TableCell>
+                <TableCell width="10%">{row.phone}</TableCell>
+                <TableCell width="10%">
+                  <TableButton
+                    {...getButtonStyles(row.record)}
+                    onClick={() => handleExamineButtonClick(row.record)}
+                  >
+                    {row.record}
+                  </TableButton>
+                </TableCell>
+                <TableCell width="10%">
+                  <TableButton
+                    {...getButtonStyles(row.exam)}
+                    onClick={() => handleExamineButtonClick(row.exam)}
+                  >
+                    {row.exam}
+                  </TableButton>
+                </TableCell>
+                <TableCell width="10%">
+                  <TableButton
+                    {...getButtonStyles(row.record_replacement)}
+                    onClick={() =>
+                      handleExamineButtonClick(row.record_replacement)
+                    }
+                  >
+                    {row.record_replacement}
+                  </TableButton>
+                </TableCell>
+                <TableCell width="10%">
+                  <TableButton
+                    {...getButtonStyles(row.basicLiving)}
+                    onClick={() => handleExamineButtonClick(row.basicLiving)}
+                  >
+                    {row.basicLiving}
+                  </TableButton>
+                </TableCell>
+                <TableCell width="10%">
+                  <TableButton
+                    {...getButtonStyles(row.identity_file)}
+                    onClick={() => handleExamineButtonClick(row.identity_file)}
+                  >
+                    {row.identity_file}
+                  </TableButton>
+                </TableCell>
+                <TableCell width="10%">
+                  <TableButton
+                    {...getButtonStyles(row.physical_100_file)}
+                    onClick={() =>
+                      handleExamineButtonClick(row.physical_100_file)
+                    }
+                  >
+                    {row.physical_100_file}
+                  </TableButton>
+                </TableCell>
+                <TableCell width="10%">
+                  <TableButton
+                    {...getButtonStyles(row.physical_100_result)}
+                    onClick={() =>
+                      handleExamineButtonClick(row.physical_100_result)
+                    }
+                  >
+                    {row.physical_100_result}
+                  </TableButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </ReviewTable>
+      </TableContainer>
+      {isPopupOpen && <DocumentReviewPopUp onClose={handleClosePopup} />}
+    </>
   );
 }
 
