@@ -1,0 +1,74 @@
+import React from "react";
+import styled from "styled-components";
+
+const BottomBarContainer = styled.div`
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 13%;
+  background-color: white;
+`;
+
+const PageNumber = styled.span`
+  width: auto;
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 1.3rem;
+  margin-left: 2%;
+`;
+
+const Pagination = styled.span`
+  padding: 0 1.1rem;
+  font-size: 1.3rem;
+  color: rgba(0, 0, 0, 0.5);
+`;
+
+const Highlight = styled.span`
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.9);
+`;
+
+const BottomBarButtons = styled.div`
+  margin-right: 2%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
+  width: auto;
+  height: 100%;
+`;
+
+const BottomBarButton = styled.button`
+  background-color: white;
+  color: rgba(0, 0, 0, 0.5);
+  transition: background-color 0.3s, font-weight 0.3s;
+  border-color: rgba(0, 0, 0, 0.2);
+  border-radius: 0.8rem;
+  width: 2.1rem;
+  height: auto;
+  font-size: 1.4rem;
+  font-weight: 500;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+    font-weight: bold;
+  }
+`;
+
+function BottomBar() {
+  return (
+    <BottomBarContainer>
+      <PageNumber>1/15 of 368</PageNumber>
+      <BottomBarButtons>
+        <BottomBarButton>&lt;</BottomBarButton>
+        <Pagination>
+          <Highlight>2 </Highlight>/ 10
+        </Pagination>
+        <BottomBarButton>&gt;</BottomBarButton>
+      </BottomBarButtons>
+    </BottomBarContainer>
+  );
+}
+
+export default BottomBar;
