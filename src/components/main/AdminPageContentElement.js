@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import helpicon from "../../assets/help_icon.png";
 import icon from "../../assets/file.png";
+import axios from "axios";
 
 const MainContainerInfoTop = styled.div`
   display: flex;
@@ -99,19 +100,22 @@ function AdminPageContentElement({}) {
     document.getElementById("essay-upload").click();
   };
 
-  const handleFileChange = (event, type) => {
+  const handleFileChange = async(event, type) => {
     const files = event.target.files;
     // 각 타입에 따라 다른 로직을 구현합니다.
-    if (type === "document") {
-      // 입학 서류 업로드 로직
-      console.log("Document files:", files);
-    } else if (type === "studentRecord") {
-      // 생활기록부 업로드 로직
-      console.log("Student record files:", files);
-    } else if (type === "essay") {
-      // 논술 업로드 로직
-      console.log("Essay files:", files);
-    }
+      for (let i = 0; i < files.length; i++) {
+        try {
+          await axios.post(
+            "http://3.37.240.199/api/documents/", {"file_url": files[i]}, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            }}
+          )
+          console.log(`${files[i].name} 파일 업로드!`);
+        } catch (error) {
+          console.log(`${files[i].name} 파일이름 양식이 올바르지 않습니다.`);
+        }
+      }
   };
 
   return (
