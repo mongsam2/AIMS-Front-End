@@ -1,0 +1,381 @@
+.table-container {
+  width: 100%;
+  height: 71%;
+  overflow-x: auto; /* 좌우 스크롤 추가 */
+  overflow-y: auto; /* 상하 스크롤 추가 */
+}
+
+.review-table {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.table-header {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  width: 100%;
+  background-color: #f2f2f2;
+  height: 5%;
+}
+
+/* 테이블 셀*/
+
+.table-header .table-cell-id,
+.table-header .table-cell-name,
+.table-header .table-cell-department,
+.table-header .table-cell-phone,
+.table-header .table-cell-record,
+.table-header .table-cell-exam,
+.table-header .table-cell-foreignSchool,
+.table-header .table-cell-basicLiving,
+.table-header .table-cell-lowIncome,
+.table-header .table-cell-rural,
+.table-header .table-cell-checkbox {
+  background-color: #f9fafd;
+}
+
+.table-cell-checkbox {
+  width: 4%;
+  height: 100%;
+  border: 1px solid #f7f9fc;
+  box-sizing: border-box;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.table-checkbox {
+  width: 20%;
+  height: 100%;
+  border: 1px solid #f7f9fc;
+  box-sizing: border-box;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-color: white; /* 기본 배경색 */
+}
+
+.table-cell-id {
+  width: 9%;
+  height: 100%;
+  border: 1px solid #f7f9fc;
+  font-size: 1.34rem;
+  box-sizing: border-box;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.table-cell-name {
+  width: 7%;
+  height: 100%;
+  border: 1px solid #f7f9fc;
+  font-size: 1.34rem;
+  box-sizing: border-box;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.table-cell-department {
+  width: 15%;
+  height: 100%;
+  border: 1px solid #f7f9fc;
+  font-size: 1.34rem;
+  box-sizing: border-box;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.table-cell-phone {
+  width: 10%;
+  height: 100%;
+  border: 1px solid #f7f9fc;
+  font-size: 1.34rem;
+  box-sizing: border-box;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.table-cell-record {
+  width: 10%;
+  height: 100%;
+  border: 1px solid #f7f9fc;
+  font-size: 1.34rem;
+  box-sizing: border-box;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.table-cell-exam {
+  width: 10%;
+  height: 100%;
+  border: 1px solid #f7f9fc;
+  font-size: 1.34rem;
+  box-sizing: border-box;
+
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.table-cell-foreignSchool {
+  width: 10%;
+  height: 100%;
+  border: 1px solid #f7f9fc;
+  font-size: 1.34rem;
+  box-sizing: border-box;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.table-cell-basicLiving {
+  width: 10%;
+  height: 100%;
+  border: 1px solid #f7f9fc;
+  font-size: 1.34rem;
+  box-sizing: border-box;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.table-cell-lowIncome {
+  width: 10%;
+  height: 100%;
+  border: 1px solid #f7f9fc;
+  font-size: 1.34rem;
+  box-sizing: border-box;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.table-cell-rural {
+  width: 10%;
+  height: 100%;
+  border: 1px solid #f7f9fc;
+  font-size: 1.34rem;
+  box-sizing: border-box;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f9fafd;
+}
+
+.table-body {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 95%;
+}
+
+.table-row {
+  display: flex;
+  background-color: white;
+  border-bottom: 1px solid #ddd;
+  height: 10%;
+}
+
+.table-row.checked {
+  background-color: #d3e3fe; /* 체크 시 배경색 */
+}
+
+.table-body .table-button-submit {
+  width: 40%;
+  height: 50%;
+  background-color: #e1fcef;
+  color: #38a06c;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.table-body .table-button-nosubmit {
+  width: 40%;
+  height: 50%;
+  background-color: #ffedef;
+  color: #ef5466;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.table-body .table-button-examine {
+  width: 40%;
+  height: 50%;
+  background-color: #fcf2e6;
+  color: #c97a20;
+  border: none;
+  font-size: 1.2rem;
+  border-radius: 5px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.table-body .table-button-blank {
+  width: 100%;
+  height: 100%;
+  background-color: #f7f9fc;
+  color: #c97a20;
+  border: none;
+  font-size: 1.34rem;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  width: 70%;
+  height: 93%;
+  background-color: #d3e3fe;
+  border-radius: 8px;
+  padding: 20px;
+  position: relative;
+}
+
+.popup-content-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 3.5%;
+}
+
+.popup-content-top-submit {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  width: 50%;
+  height: 100%;
+  margin-left: 1.5%;
+}
+
+.popup-content-top-submit-button {
+  width: auto;
+  height: 100%;
+  background-color: #edf0f5;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.6);
+  border-radius: 5px 5px 0px 0px;
+  padding: 0 20px 0 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-right: 0.5%;
+}
+
+.popup-content-top-right {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  width: 50%;
+  height: 100%;
+  gap: 2%;
+}
+
+.popup-content-top-date {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  height: 100%;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.popup-close-button {
+  width: 2rem;
+  height: 2rem;
+  background-color: #d3e3fe;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.5rem;
+  font-weight: 1000;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.popup-inner-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 96%;
+  border-radius: 0.5rem 0.5rem 0.5rem 0.5rem;
+  background-color: white;
+}
+
+.popup-inner-content-set {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  height: 95%;
+}
+
+.popup-inner-content-pdf {
+  width: 55%;
+  height: 100%;
+  background-color: #d3e3fe;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.5rem;
+}
+
+.popup-inner-content-info {
+  width: 30%;
+  height: 100%;
+  background-color: blue;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
