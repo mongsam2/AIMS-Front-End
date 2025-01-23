@@ -104,17 +104,28 @@ function AdminPageContentElement({}) {
     const files = event.target.files;
     // 각 타입에 따라 다른 로직을 구현합니다.
       for (let i = 0; i < files.length; i++) {
+        let document_id = null;
         try {
-          await axios.post(
+          const response = await axios.post(
             "http://3.37.240.199/api/documents/", {"file_url": files[i]}, {
             headers: {
               'Content-Type': 'multipart/form-data',
             }}
-          )
+          );
+          document_id = response.data.document_id;
+          console.log(response.data);
           console.log(`${files[i].name} 파일 업로드!`);
         } catch (error) {
           console.log(`${files[i].name} 파일이름 양식이 올바르지 않습니다.`);
         }
+        if (type === "document") {
+          axios.post(`http://3.37.240.199/api/aims/extractions/${document_id}/`)
+        } else if (type == "studentRecord") {
+          axios.post(`http://3.37.240.199/api/aims/summarizations/${document_id}/`)
+        } else if (type == "essay") {
+          axios.post(`http://3.37.240.199/api/aims/evaluations/${document_id}/`)
+        }
+        
       }
   };
 
