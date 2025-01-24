@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 const RecordTableContainer = styled.div`
   width: 15%;
@@ -79,16 +80,31 @@ const RecordTableRow = styled.div`
   }
 `;
 
-function ApplicantTable() {
+function StudentRecordApplicantTable({ onRowSelect }) {
   const [selectedRow, setSelectedRow] = useState(null);
+  const [tableData, setTableData] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://3.37.240.199/api/documents/student-records/")
+      .then((response) => {
+        const ids = response.data; // 서버에서 받은 데이터
+        const data = ids.map((id, index) => ({
+          id: `${id}`,
+          num: `${index + 31293423}`,
+        }));
+        setTableData(data);
+      })
+      .catch((error) => {
+        console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
+      });
+  }, []);
+
   const handleRowClick = (index) => {
     setSelectedRow(index);
+    onRowSelect(tableData[index].id);
   };
 
-  const tableData = Array.from({ length: 30 }, (_, index) => ({
-    id: `${index + 1}`,
-    num: `${index + 31293423}`,
-  }));
   return (
     <RecordTableContainer>
       <RecordReviewTable>
@@ -121,4 +137,4 @@ function ApplicantTable() {
   );
 }
 
-export default ApplicantTable;
+export default StudentRecordApplicantTable;
