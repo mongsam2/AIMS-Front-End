@@ -56,19 +56,28 @@ const BottomBarButton = styled.button`
   }
 `;
 
-function BottomBar() {
+function DocumentBottomBar({
+  currentPage,
+  totalPages,
+  onNextPage,
+  onPrevPage,
+  currentItemsRange,
+  totalItemsCount,
+}) {
   return (
     <BottomBarContainer>
-      <PageNumber>1/15 of 368</PageNumber>
+      <PageNumber>
+        {currentItemsRange} of {totalItemsCount}
+      </PageNumber>
       <BottomBarButtons>
-        <BottomBarButton>&lt;</BottomBarButton>
+        <BottomBarButton onClick={onPrevPage}>&lt;</BottomBarButton>
         <Pagination>
-          <Highlight>2 </Highlight>/ 10
+          <Highlight>{currentPage} </Highlight>/ {totalPages}
         </Pagination>
-        <BottomBarButton>&gt;</BottomBarButton>
+        <BottomBarButton onClick={onNextPage}>&gt;</BottomBarButton>
       </BottomBarButtons>
     </BottomBarContainer>
   );
 }
 
-export default BottomBar;
+export default DocumentBottomBar;

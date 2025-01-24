@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import DocumentReviewPopUp from "./DocumentReviewPopUp";
+import BottomBar from "./DocumentBottomBar";
 
 const TableContainer = styled.div`
   width: 100%;
@@ -95,13 +96,18 @@ function getButtonStyles(status) {
   }
 }
 
-function DocumentReviewTable() {
+function DocumentReviewTable({ searchTerm, searchCriteria }) {
   const [tableData, setTableData] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12; // 페이지당 항목 수
 
-  const handleExamineButtonClick = (status) => {
+  const handleExamineButtonClick = (status, id, documentType) => {
     if (status === "검토" || status === "제출") {
       setIsPopupOpen(true);
+      setSelectedId(id);
+      console.log("Document Type:", documentType);
     }
   };
 
@@ -121,7 +127,7 @@ function DocumentReviewTable() {
       const response = await axios.get("http://3.37.240.199/api/applicants/");
       const results = response.data.results.map((item) => {
         const documentStatus = item.documents.reduce((acc, doc) => {
-          acc[doc.document_type] = doc.status;
+          acc[doc.document_type] = { status: doc.status, id: doc.id };
           return acc;
         }, {});
 
@@ -130,14 +136,23 @@ function DocumentReviewTable() {
           name: item.name,
           department: item.department,
           phone: item.phone,
-          record: documentStatus["학생생활기록부"] || "해당없음",
-          exam: documentStatus["검정고시합격증명서"] || "해당없음",
+          record: documentStatus["학생생활기록부"]?.status || "해당없음",
+          record_id: documentStatus["학생생활기록부"]?.id,
+          exam: documentStatus["검정고시합격증명서"]?.status || "해당없음",
+          exam_id: documentStatus["검정고시합격증명서"]?.id,
           record_replacement:
-            documentStatus["생활기록부대체양식"] || "해당없음",
-          basicLiving: documentStatus["기초생활수급자증명서"] || "해당없음",
-          identity_file: documentStatus["주민등록본"] || "해당없음",
-          physical_100_file: documentStatus["국민체력100인증서"] || "해당없음",
-          physical_100_result: documentStatus["체력평가"] || "해당없음",
+            documentStatus["생활기록부대체양식"]?.status || "해당없음",
+          record_replacement_id: documentStatus["생활기록부대체양식"]?.id,
+          basicLiving:
+            documentStatus["기초생활수급자증명서"]?.status || "해당없음",
+          basicLiving_id: documentStatus["기초생활수급자증명서"]?.id,
+          identity_file: documentStatus["주민등록본"]?.status || "해당없음",
+          identity_file_id: documentStatus["주민등록본"]?.id,
+          physical_100_file:
+            documentStatus["국민체력100인증서"]?.status || "해당없음",
+          physical_100_file_id: documentStatus["국민체력100인증서"]?.id,
+          physical_100_result: documentStatus["체력평가"]?.status || "해당없음",
+          physical_100_result_id: documentStatus["체력평가"]?.id,
           isChecked: false,
         };
       });
@@ -151,6 +166,32 @@ function DocumentReviewTable() {
   useEffect(() => {
     loadData();
   }, []);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+  const filteredItems = tableData.filter((item) => {
+    if (searchCriteria === "name") {
+      return item.name.includes(searchTerm);
+    } else if (searchCriteria === "id") {
+      return item.id.includes(searchTerm);
+    }
+    return true;
+  });
+
+  const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handleNextPage = () => {
+    if (currentPage < Math.ceil(tableData.length / itemsPerPage)) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   return (
     <>
@@ -173,7 +214,7 @@ function DocumentReviewTable() {
             <TableCellHeader width="10%">체력평가결과지</TableCellHeader>
           </TableHeader>
           <TableBody>
-            {tableData.map((row, index) => (
+            {currentItems.map((row, index) => (
               <TableRow key={index} isChecked={row.isChecked}>
                 <TableCell width="4%">
                   <input
@@ -190,7 +231,13 @@ function DocumentReviewTable() {
                 <TableCell width="10%">
                   <TableButton
                     {...getButtonStyles(row.record)}
-                    onClick={() => handleExamineButtonClick(row.record)}
+                    onClick={() =>
+                      handleExamineButtonClick(
+                        row.record,
+                        row.record_id,
+                        "학생생활기록부"
+                      )
+                    }
                   >
                     {row.record}
                   </TableButton>
@@ -198,7 +245,13 @@ function DocumentReviewTable() {
                 <TableCell width="10%">
                   <TableButton
                     {...getButtonStyles(row.exam)}
-                    onClick={() => handleExamineButtonClick(row.exam)}
+                    onClick={() =>
+                      handleExamineButtonClick(
+                        row.exam,
+                        row.exam_id,
+                        "검정고시합격증명서"
+                      )
+                    }
                   >
                     {row.exam}
                   </TableButton>
@@ -207,7 +260,11 @@ function DocumentReviewTable() {
                   <TableButton
                     {...getButtonStyles(row.record_replacement)}
                     onClick={() =>
-                      handleExamineButtonClick(row.record_replacement)
+                      handleExamineButtonClick(
+                        row.record_replacement,
+                        row.record_replacement_id,
+                        "생활기록부대체양식"
+                      )
                     }
                   >
                     {row.record_replacement}
@@ -216,7 +273,13 @@ function DocumentReviewTable() {
                 <TableCell width="10%">
                   <TableButton
                     {...getButtonStyles(row.basicLiving)}
-                    onClick={() => handleExamineButtonClick(row.basicLiving)}
+                    onClick={() =>
+                      handleExamineButtonClick(
+                        row.basicLiving,
+                        row.basicLiving_id,
+                        "기초생활수급자증명서"
+                      )
+                    }
                   >
                     {row.basicLiving}
                   </TableButton>
@@ -224,7 +287,13 @@ function DocumentReviewTable() {
                 <TableCell width="10%">
                   <TableButton
                     {...getButtonStyles(row.identity_file)}
-                    onClick={() => handleExamineButtonClick(row.identity_file)}
+                    onClick={() =>
+                      handleExamineButtonClick(
+                        row.identity_file,
+                        row.identity_file_id,
+                        "주민등록본"
+                      )
+                    }
                   >
                     {row.identity_file}
                   </TableButton>
@@ -233,7 +302,11 @@ function DocumentReviewTable() {
                   <TableButton
                     {...getButtonStyles(row.physical_100_file)}
                     onClick={() =>
-                      handleExamineButtonClick(row.physical_100_file)
+                      handleExamineButtonClick(
+                        row.physical_100_file,
+                        row.physical_100_file_id,
+                        "국민체력100인증서"
+                      )
                     }
                   >
                     {row.physical_100_file}
@@ -243,7 +316,11 @@ function DocumentReviewTable() {
                   <TableButton
                     {...getButtonStyles(row.physical_100_result)}
                     onClick={() =>
-                      handleExamineButtonClick(row.physical_100_result)
+                      handleExamineButtonClick(
+                        row.physical_100_result,
+                        row.physical_100_result_id,
+                        "체력평가"
+                      )
                     }
                   >
                     {row.physical_100_result}
@@ -254,7 +331,23 @@ function DocumentReviewTable() {
           </TableBody>
         </ReviewTable>
       </TableContainer>
-      {isPopupOpen && <DocumentReviewPopUp onClose={handleClosePopup} />}
+      {isPopupOpen && (
+        <DocumentReviewPopUp
+          onClose={handleClosePopup}
+          selectedId={selectedId}
+        />
+      )}
+      <BottomBar
+        currentPage={currentPage}
+        totalPages={Math.ceil(tableData.length / itemsPerPage)}
+        onNextPage={handleNextPage}
+        onPrevPage={handlePrevPage}
+        currentItemsRange={`${indexOfFirstItem + 1}-${Math.min(
+          indexOfLastItem,
+          tableData.length
+        )}`}
+        totalItemsCount={tableData.length}
+      />
     </>
   );
 }
