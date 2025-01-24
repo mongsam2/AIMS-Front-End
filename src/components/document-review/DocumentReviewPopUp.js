@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 const PopupOverlay = styled.div`
   position: fixed;
@@ -120,7 +121,30 @@ const PopupInnerContentInfo = styled.div`
   align-items: center;
 `;
 
-function DocumentReviewPopUp({ onClose }) {
+function DocumentReviewPopUp({ onClose, selectedId, documentType }) {
+  const [fileUrl, setFileUrl] = useState("");
+  const [reasons, setReasons] = useState([]);
+  
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://3.37.240.199/api/documents/${selectedId}/${documentType}/`
+        );
+        const data = response.data;
+        if (data.length > 0) {
+          setFileUrl(data[0].file_path);
+          setReasons(data[0].reasons || []);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [selectedId, documentType]);
+
   return (
     <PopupOverlay onClick={onClose}>
       <PopupContent onClick={(e) => e.stopPropagation()}>
@@ -134,16 +158,17 @@ function DocumentReviewPopUp({ onClose }) {
         </PopupContentTop>
         <PopupInnerContent>
           <PopupInnerContentSet>
-            <VisualizeDocumentPDF
-              title="PDF Viewer"
-              src="https://arxiv.org/pdf/2005.11401"
-            >
+            <VisualizeDocumentPDF title="PDF Viewer" src={fileUrl}>
               이 브라우저는 PDF 파일을 지원하지 않습니다.
-              <a href="https://arxiv.org/pdf/2005.11401">
-                여기에서 PDF를 다운로드하세요.
-              </a>
+              <a href={fileUrl}>여기에서 PDF를 다운로드하세요.</a>
             </VisualizeDocumentPDF>
-            <PopupInnerContentInfo>정보</PopupInnerContentInfo>
+            <PopupInnerContentInfo>
+              {reasons.map((reason, index) => (
+                <div key={index}>
+                  페이지: {reason.page}, 내용: {reason.content}
+                </div>
+              ))}
+            </PopupInnerContentInfo>
           </PopupInnerContentSet>
         </PopupInnerContent>
       </PopupContent>

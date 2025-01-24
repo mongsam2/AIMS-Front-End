@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import searchicon from "../../assets/search_icon.png";
 
@@ -82,23 +82,37 @@ const SearchIcon = styled.img`
   }
 `;
 
-function MiddleContent() {
+function MiddleContent({ onSearchTermChange, onSearchCriteriaChange }) {
+  const [localSearchTerm, setLocalSearchTerm] = useState("");
+  const [localSearchCriteria, setLocalSearchCriteria] = useState("name");
+
+  const handleSearchClick = () => {
+    onSearchTermChange(localSearchTerm);
+    onSearchCriteriaChange(localSearchCriteria);
+  };
+
   return (
     <MiddleBar>
-      <Dropdown name="admissionType">
-        <option value="1">전체</option>
-        <option value="2">학생부종합 (서류)</option>
-        <option value="3">기회균형</option>
-        <option value="4">서해5도</option>
-        <option value="5">실기우수자</option>
+      <Dropdown
+        name="admissionType"
+        onChange={(e) => setLocalSearchCriteria(e.target.value)}
+      >
+        <option value="name">이름</option>
+        <option value="id">수험번호</option>
       </Dropdown>
       <SearchContainer>
-        <SearchDropdown>
+        <SearchDropdown
+          onChange={(e) => setLocalSearchCriteria(e.target.value)}
+        >
           <option value="name">이름</option>
           <option value="id">수험번호</option>
         </SearchDropdown>
-        <SearchInput type="text" placeholder="검색어를 입력하세요" />
-        <SearchButton>
+        <SearchInput
+          type="text"
+          placeholder="검색어를 입력하세요"
+          onChange={(e) => setLocalSearchTerm(e.target.value)}
+        />
+        <SearchButton onClick={handleSearchClick}>
           <SearchIcon src={searchicon} alt="search-icon" />
         </SearchButton>
       </SearchContainer>
