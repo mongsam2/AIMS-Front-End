@@ -64,7 +64,7 @@ const WhiteBox = styled.div`
   align-items: center;
 `;
 
-function StudentRecordEvaluation() {
+function StudentRecordEvaluation({ content, question, memo }) {
   const [selectedEvaluation, setSelectedEvaluation] = useState("record");
   const handleEvaluationClick = (type) => {
     setSelectedEvaluation(type);
@@ -87,10 +87,14 @@ function StudentRecordEvaluation() {
         </EvaluationChooseButton>
       </EvaluationChoose>
       <EvaluationSummary>
-        <WhiteBox large>None</WhiteBox>
+        <WhiteBox large>
+          {selectedEvaluation === "record"
+            ? content || "None"
+            : question || "None"}
+        </WhiteBox>
       </EvaluationSummary>
       <EvaluationDetail>
-        <WhiteBox>None</WhiteBox>
+        <WhiteBox>{memo || "None"}</WhiteBox>
       </EvaluationDetail>
     </EvaluationContainer>
   );
