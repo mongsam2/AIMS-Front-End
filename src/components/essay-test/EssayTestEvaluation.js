@@ -39,11 +39,11 @@ const WhiteBox = styled.div`
   align-items: center;
 `;
 
-function EssayTestEvaluation() {
+function EssayTestEvaluation({ content }) {
   return (
     <EssayTestEvaluationContainer>
       <EvaluationSummary>
-        <WhiteBox>None</WhiteBox>
+        <WhiteBox large>{content || "None"}</WhiteBox>
       </EvaluationSummary>
       <EvaluationDetail>
         <WhiteBox>None</WhiteBox>
@@ -52,4 +52,4 @@ function EssayTestEvaluation() {
   );
 }
 
-export default EssayTestEvaluation; 
+export default EssayTestEvaluation;
