@@ -11,8 +11,15 @@ const MiddleBar = styled.div`
   height: 7%;
 `;
 
+const DropdownContainer = styled.div`
+  display: flex;
+  align-items: center;
+  width: 85%;
+  height: 100%;
+`;
+
 const Dropdown = styled.select`
-  width: 8%;
+  width: 13%;
   font-size: 1.375rem;
   font-weight: 500;
   color: rgba(0, 0, 0, 0.5);
@@ -82,41 +89,85 @@ const SearchIcon = styled.img`
   }
 `;
 
-function MiddleContent({ onSearchTermChange, onSearchCriteriaChange }) {
+const SearchTag = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #d3e3fe70;
+  border-radius: 10px;
+  margin-left: 1%;
+  padding: 0 0.5% 0 1%;
+  width: auto;
+  height: 50%;
+`;
+
+const SearchTagText = styled.span`
+  margin-right: 5px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #112059;
+`;
+
+const ClearButton = styled.button`
+  background: none;
+  border: none;
+  color: red;
+  font-size: 1.1rem;
+  cursor: pointer;
+  font-weight: 700;
+`;
+
+function MiddleContent({ onSearchTermChange }) {
   const [localSearchTerm, setLocalSearchTerm] = useState("");
-  const [localSearchCriteria, setLocalSearchCriteria] = useState("name");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearchClick = () => {
-    onSearchTermChange(localSearchTerm);
-    onSearchCriteriaChange(localSearchCriteria);
+    if (localSearchTerm) {
+      onSearchTermChange(localSearchTerm);
+      setSearchTerm(localSearchTerm);
+      setLocalSearchTerm("");
+    }
+  };
+
+  const handleClearSearch = () => {
+    onSearchTermChange("");
+    setSearchTerm("");
   };
 
   return (
-    <MiddleBar>
-      <Dropdown
-        name="admissionType"
-        onChange={(e) => setLocalSearchCriteria(e.target.value)}
-      >
-        <option value="name">이름</option>
-        <option value="id">수험번호</option>
-      </Dropdown>
-      <SearchContainer>
-        <SearchDropdown
-          onChange={(e) => setLocalSearchCriteria(e.target.value)}
-        >
-          <option value="name">이름</option>
-          <option value="id">수험번호</option>
-        </SearchDropdown>
-        <SearchInput
-          type="text"
-          placeholder="검색어를 입력하세요"
-          onChange={(e) => setLocalSearchTerm(e.target.value)}
-        />
-        <SearchButton onClick={handleSearchClick}>
-          <SearchIcon src={searchicon} alt="search-icon" />
-        </SearchButton>
-      </SearchContainer>
-    </MiddleBar>
+    <>
+      <MiddleBar>
+        <DropdownContainer>
+          <Dropdown name="admissionType">
+            <option>전체</option>
+            <option>학생부종합(면접형)</option>
+            <option>학생부종합(서류형)</option>
+            <option>학생부종합(국방시스템특별전형)</option>
+          </Dropdown>
+          {searchTerm && (
+            <SearchTag>
+              <SearchTagText>{searchTerm}</SearchTagText>
+              <ClearButton onClick={handleClearSearch}>X</ClearButton>
+            </SearchTag>
+          )}
+        </DropdownContainer>
+        <SearchContainer>
+          <SearchDropdown>
+            <option value="name">이름</option>
+            <option value="id">수험번호</option>
+          </SearchDropdown>
+          <SearchInput
+            type="text"
+            placeholder="검색어를 입력하세요"
+            value={localSearchTerm}
+            onChange={(e) => setLocalSearchTerm(e.target.value)}
+          />
+          <SearchButton onClick={handleSearchClick}>
+            <SearchIcon src={searchicon} alt="search-icon" />
+          </SearchButton>
+        </SearchContainer>
+      </MiddleBar>
+    </>
   );
 }
 
