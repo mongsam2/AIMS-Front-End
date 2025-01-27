@@ -91,7 +91,7 @@ function StudentRecordApplicantTable({ onRowSelect }) {
         const ids = response.data; // 서버에서 받은 데이터
         const data = ids.map((id, index) => ({
           id: `${id}`,
-          num: `${index + 31293423}`,
+          num: `${index + 1}`,
         }));
         setTableData(data);
       })
@@ -123,10 +123,10 @@ function StudentRecordApplicantTable({ onRowSelect }) {
                 onClick={() => handleRowClick(index)}
               >
                 <RecordTableCell className="default-cell">
-                  {row.id}
+                  {row.num}
                 </RecordTableCell>
                 <RecordTableCell className="default-num">
-                  {row.num}
+                  {row.id}
                 </RecordTableCell>
               </RecordTableRow>
             ))}
