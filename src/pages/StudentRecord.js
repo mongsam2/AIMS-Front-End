@@ -16,8 +16,11 @@ function StudentRecord() {
   const [selectedContent, setSelectedContent] = useState(null);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [selectedMemo, setSelectedMemo] = useState(null);
+  const [selectedEvaluation, setSelectedEvaluation] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
 
   const handleRowSelect = (id) => {
+    setSelectedId(id);
     axios
       .get(`http://3.37.240.199/api/documents/student-records/${id}/`)
       .then((response) => {
@@ -28,6 +31,22 @@ function StudentRecord() {
       })
       .catch((error) => {
         console.error("API 호출 중 오류가 발생했습니다:", error);
+      });
+  };
+
+  const updateMemo = (newMemo, selectedId) => {
+    axios
+      .post(
+        `http://3.37.240.199/api/documents/student-records/${selectedId}/`,
+        {
+          memo: newMemo,
+        }
+      )
+      .then((response) => {
+        setSelectedMemo(response.data.memo);
+      })
+      .catch((error) => {
+        console.error("메모 업데이트 중 오류가 발생했습니다:", error);
       });
   };
 
@@ -43,6 +62,9 @@ function StudentRecord() {
             content={selectedContent}
             question={selectedQuestion}
             memo={selectedMemo}
+            evaluation={selectedEvaluation}
+            onUpdateMemo={updateMemo}
+            id={selectedId}
           />
         </StudentRecordContent>
       </MainContent>
