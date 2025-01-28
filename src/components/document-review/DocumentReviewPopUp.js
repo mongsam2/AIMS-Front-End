@@ -42,12 +42,11 @@ const PopupContentTopSubmit = styled.div`
 `;
 
 const PopupContentTopSubmitButton = styled.button`
-  width: auto;
+  width: 13%;
   height: 100%;
   background-color: #edf0f5;
   font-size: 1.5rem;
-  font-weight: bold;
-  color: rgba(0, 0, 0, 0.6);
+  font-weight: 600;
   border: none;
   border-radius: 5px 5px 0px 0px;
   padding: 0 20px 0 20px;
@@ -114,7 +113,7 @@ const VisualizeDocumentPDF = styled.iframe`
 const PopupInnerContentInfo = styled.div`
   width: 25%;
   height: 100%;
-  background-color: blue;
+  background-color: #d3e3fe;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -124,33 +123,73 @@ const PopupInnerContentInfo = styled.div`
 function DocumentReviewPopUp({ onClose, selectedId, documentType }) {
   const [fileUrl, setFileUrl] = useState("");
   const [reasons, setReasons] = useState([]);
-  
+  const [documents, setDocuments] = useState([]);
+  const [activeButtonIndex, setActiveButtonIndex] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const LoadData = async () => {
       try {
+        console.log("Selected ID:", selectedId);
+        console.log("Document Type:", documentType);
+
         const response = await axios.get(
           `http://3.37.240.199/api/documents/${selectedId}/${documentType}/`
         );
         const data = response.data;
+
+        // 모든 문서를 상태에 저장합니다.
+        setDocuments(data);
+
+        // 제일 첫 번째 제출된 서류를 기본으로 설정합니다.
         if (data.length > 0) {
-          setFileUrl(data[0].file_path);
-          setReasons(data[0].reasons || []);
+          const firstDocument = data[0];
+          setFileUrl(firstDocument.file_url);
+          setReasons(firstDocument.reasons);
+          setActiveButtonIndex(0);
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("서류데이터를 가져오는 중 오류가 발생했습니다:", error);
       }
     };
 
-    fetchData();
+    LoadData();
   }, [selectedId, documentType]);
+
+  const handleDocumentClick = (index) => {
+    const document = documents[index];
+    setFileUrl(document.file_url);
+    setReasons(document.reasons);
+    setActiveButtonIndex(index);
+  };
 
   return (
     <PopupOverlay onClick={onClose}>
       <PopupContent onClick={(e) => e.stopPropagation()}>
         <PopupContentTop>
           <PopupContentTopSubmit>
-            <PopupContentTopSubmitButton>제출</PopupContentTopSubmitButton>
+            {documents
+              .slice()
+              .reverse()
+              .map((doc, index, reversedDocs) => (
+                <PopupContentTopSubmitButton
+                  key={index}
+                  onClick={() =>
+                    handleDocumentClick(reversedDocs.length - 1 - index)
+                  }
+                  style={{
+                    backgroundColor:
+                      activeButtonIndex === reversedDocs.length - 1 - index
+                        ? "#7696CF"
+                        : "#edf0f5",
+                    color:
+                      activeButtonIndex === reversedDocs.length - 1 - index
+                        ? "white"
+                        : "rgba(0, 0, 0, 0.6)",
+                  }}
+                >
+                  {index === 0 ? "제출" : `재제출${index}`}
+                </PopupContentTopSubmitButton>
+              ))}
           </PopupContentTopSubmit>
           <PopupContentTopRight>
             <PopupCloseButton onClick={onClose}>X</PopupCloseButton>
