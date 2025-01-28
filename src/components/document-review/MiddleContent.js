@@ -19,7 +19,7 @@ const DropdownContainer = styled.div`
 `;
 
 const Dropdown = styled.select`
-  width: 13%;
+  width: 16%;
   font-size: 1.375rem;
   font-weight: 500;
   color: rgba(0, 0, 0, 0.5);
@@ -117,9 +117,10 @@ const ClearButton = styled.button`
   font-weight: 700;
 `;
 
-function MiddleContent({ onSearchTermChange }) {
+function MiddleContent({ onSearchTermChange, onAdmissionTypeChange }) {
   const [localSearchTerm, setLocalSearchTerm] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [admissionType, setAdmissionType] = useState("전체");
 
   const handleSearchClick = () => {
     if (localSearchTerm) {
@@ -134,15 +135,22 @@ function MiddleContent({ onSearchTermChange }) {
     setSearchTerm("");
   };
 
+  const handleAdmissionTypeChange = (event) => {
+    const selectedType = event.target.value;
+    setAdmissionType(selectedType);
+    onAdmissionTypeChange(selectedType);
+  };
+
   return (
     <>
       <MiddleBar>
         <DropdownContainer>
-          <Dropdown name="admissionType">
-            <option>전체</option>
-            <option>학생부종합(면접형)</option>
-            <option>학생부종합(서류형)</option>
-            <option>학생부종합(국방시스템특별전형)</option>
+          <Dropdown name="admissionType" onChange={handleAdmissionTypeChange}>
+            <option value="전체">전체</option>
+            <option value="면접">학생부종합(면접형)</option>
+            <option value="서류">학생부종합(서류형)</option>
+            <option value="국방">학생부종합(국방시스템특별전형)</option>
+            <option value="논술">논술</option>
           </Dropdown>
           {searchTerm && (
             <SearchTag>
