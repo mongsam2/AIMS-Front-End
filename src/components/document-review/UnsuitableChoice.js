@@ -27,28 +27,36 @@ const Button = styled.button`
 const TableSelectBar = styled.span`
   width: 1px;
   height: 50%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.1);
 `;
 
-function UnsuitableChoice() {
+function UnsuitableChoice({ onFilterChange }) {
   const [selectedFilter, setSelectedFilter] = useState("unsuit");
   const handleFilterClick = (filter) => {
     setSelectedFilter(filter);
+    onFilterChange(filter);
   };
   return (
     <TableSelect>
-      <Button
-        className={selectedFilter === "unsuit" ? "selected" : ""}
-        onClick={() => handleFilterClick("unsuit")}
-      >
-        부적합
-      </Button>
-      <TableSelectBar />
       <Button
         className={selectedFilter === "suit" ? "selected" : ""}
         onClick={() => handleFilterClick("suit")}
       >
         전체
+      </Button>
+      <TableSelectBar />
+      <Button
+        className={selectedFilter === "suitable" ? "selected" : ""}
+        onClick={() => handleFilterClick("suitable")}
+      >
+        적합
+      </Button>
+      <TableSelectBar />
+      <Button
+        className={selectedFilter === "unsuit" ? "selected" : ""}
+        onClick={() => handleFilterClick("unsuit")}
+      >
+        부적합
       </Button>
     </TableSelect>
   );
