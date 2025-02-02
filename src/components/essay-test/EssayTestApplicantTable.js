@@ -71,11 +71,11 @@ const RecordTableRow = styled.div`
   width: 100%;
   height: 70px;
   &:hover {
-    background-color: #b4b5b6;
+    background-color: #c5c8fd40;
     color: rgba(0, 0, 0, 0.9);
   }
   &.selected {
-    background-color: #b4b5b6;
+    background-color: #c5c8fd40;
     color: rgba(0, 0, 0, 0.9);
   }
 `;
