@@ -2,13 +2,13 @@ import React from "react";
 import styled from "styled-components";
 
 const BottomBarContainer = styled.div`
-  margin-top: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 13%;
+  height: 7%;
   background-color: white;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 `;
 
 const PageNumber = styled.span`

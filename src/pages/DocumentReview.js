@@ -9,6 +9,7 @@ import { useState } from "react";
 function DocumentReview() {
   const [searchTerm, setSearchTerm] = useState("");
   const [admissionType, setAdmissionType] = useState("전체");
+  const [filter, setFilter] = useState("unsuit");
 
   return (
     <Container>
@@ -19,10 +20,11 @@ function DocumentReview() {
           onSearchTermChange={setSearchTerm}
           onAdmissionTypeChange={setAdmissionType}
         />
-        <UnsuitableChoice />
+        <UnsuitableChoice onFilterChange={setFilter} />
         <DocumentReviewTable
           searchTerm={searchTerm}
           admissionType={admissionType}
+          filter={filter}
         />
       </MainContent>
     </Container>
