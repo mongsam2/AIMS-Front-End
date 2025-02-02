@@ -8,15 +8,22 @@ import { useState } from "react";
 
 function DocumentReview() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [admissionType, setAdmissionType] = useState("전체");
 
   return (
     <Container>
       <Sidebar />
       <MainContent>
         <Header title="입학 서류 검토" />
-        <MiddleContent onSearchTermChange={setSearchTerm} />
+        <MiddleContent
+          onSearchTermChange={setSearchTerm}
+          onAdmissionTypeChange={setAdmissionType}
+        />
         <UnsuitableChoice />
-        <DocumentReviewTable searchTerm={searchTerm} />
+        <DocumentReviewTable
+          searchTerm={searchTerm}
+          admissionType={admissionType}
+        />
       </MainContent>
     </Container>
   );

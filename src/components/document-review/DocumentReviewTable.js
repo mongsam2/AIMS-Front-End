@@ -33,12 +33,16 @@ const TableCellHeader = styled.div`
   border: 1px solid #f7f9fc;
   box-sizing: border-box;
   font-weight: 500;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   color: ${({ color }) => color || "rgba(0, 0, 0, 0.9)"};
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: ${({ bgColor }) => bgColor || "#F7F9FCCC"};
+  input.table-checkbox {
+    width: 100%;
+    height: 21%;
+  }
 `;
 
 const TableCell = styled.div`
@@ -47,12 +51,16 @@ const TableCell = styled.div`
   border: 1px solid #f7f9fc;
   box-sizing: border-box;
   font-weight: 500;
-  font-size: 1.2rem;
-  color: ${({ color }) => color || "rgba(0, 0, 0, 0.7)"};
+  font-size: 1.4rem;
+  color: ${({ color }) => color || "rgba(0, 0, 0, 0.6)"};
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: ${({ bgColor }) => bgColor || "white"};
+  input.table-checkbox {
+    width: 100%;
+    height: 21%;
+  }
 `;
 
 const TableBody = styled.div`
@@ -70,13 +78,13 @@ const TableRow = styled.div`
 `;
 
 const TableButton = styled.button`
-  width: 40%;
-  height: 50%;
+  width: 100%;
+  height: 100%;
   background-color: ${({ bgColor }) => bgColor || "#f7f9fc"};
   color: ${({ color }) => color || "#c97a20"};
   border: none;
   border-radius: 5px;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: 500;
   cursor: pointer;
 `;
@@ -86,27 +94,28 @@ function getButtonStyles(status) {
     case "미제출":
       return { bgColor: "#ffedef", color: "#ef5466" };
     case "검토":
-      return { bgColor: "#fcf2e6", color: "#c97a20" };
+      return { bgColor: "rgba(255, 207, 86, 0.5)", color: "#c97a20" };
     case "제출":
       return { bgColor: "#e1fcef", color: "#38a06c" };
     case "해당없음":
-      return { bgColor: "#f9fafd", color: "rgba(0, 0, 0, 0.6)" };
+      return { bgColor: "white", color: "rgba(0, 0, 0, 0.2)" };
     default:
       return { bgColor: "#f9fafd", color: "rgba(0, 0, 0, 0.6)" };
   }
 }
 
-function DocumentReviewTable({ searchTerm, searchCriteria }) {
+function DocumentReviewTable({ searchTerm, admissionType }) {
   const [tableData, setTableData] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 12; // 페이지당 항목 수
-
+  const itemsPerPage = 10; // 페이지당 항목 수
+  const [documentType, setDocumentType] = useState(null);
   const handleExamineButtonClick = (status, id, documentType) => {
     if (status === "검토" || status === "제출") {
       setIsPopupOpen(true);
       setSelectedId(id);
+      setDocumentType(documentType);
       console.log("Document Type:", documentType);
     }
   };
@@ -136,23 +145,15 @@ function DocumentReviewTable({ searchTerm, searchCriteria }) {
           name: item.name,
           department: item.department,
           phone: item.phone,
-          record: documentStatus["학생생활기록부"]?.status || "해당없음",
-          record_id: documentStatus["학생생활기록부"]?.id,
-          exam: documentStatus["검정고시합격증명서"]?.status || "해당없음",
-          exam_id: documentStatus["검정고시합격증명서"]?.id,
+          applicant_type: item.applicant_type,
+          record: documentStatus["학생생활기록부"]?.status || "",
+          exam: documentStatus["검정고시합격증명서"]?.status || "",
           record_replacement:
-            documentStatus["생활기록부대체양식"]?.status || "해당없음",
-          record_replacement_id: documentStatus["생활기록부대체양식"]?.id,
-          basicLiving:
-            documentStatus["기초생활수급자증명서"]?.status || "해당없음",
-          basicLiving_id: documentStatus["기초생활수급자증명서"]?.id,
-          identity_file: documentStatus["주민등록본"]?.status || "해당없음",
-          identity_file_id: documentStatus["주민등록본"]?.id,
-          physical_100_file:
-            documentStatus["국민체력100인증서"]?.status || "해당없음",
-          physical_100_file_id: documentStatus["국민체력100인증서"]?.id,
-          physical_100_result: documentStatus["체력평가"]?.status || "해당없음",
-          physical_100_result_id: documentStatus["체력평가"]?.id,
+            documentStatus["생활기록부대체양식"]?.status || "",
+          basicLiving: documentStatus["기초생활수급자증명서"]?.status || "",
+          identity_file: documentStatus["주민등록본"]?.status || "",
+          physical_100_file: documentStatus["국민체력100인증서"]?.status || "",
+          physical_100_result: documentStatus["체력평가"]?.status || "",
           isChecked: false,
         };
       });
@@ -171,12 +172,11 @@ function DocumentReviewTable({ searchTerm, searchCriteria }) {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
   const filteredItems = tableData.filter((item) => {
-    if (searchCriteria === "name") {
-      return item.name.includes(searchTerm);
-    } else if (searchCriteria === "id") {
-      return item.id.includes(searchTerm);
-    }
-    return true;
+    const matchesSearchTerm =
+      item.name.includes(searchTerm) || item.id.includes(searchTerm);
+    const matchesAdmissionType =
+      admissionType === "전체" || item.applicant_type === admissionType;
+    return matchesSearchTerm && matchesAdmissionType;
   });
 
   const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
@@ -234,7 +234,7 @@ function DocumentReviewTable({ searchTerm, searchCriteria }) {
                     onClick={() =>
                       handleExamineButtonClick(
                         row.record,
-                        row.record_id,
+                        row.id,
                         "학생생활기록부"
                       )
                     }
@@ -248,7 +248,7 @@ function DocumentReviewTable({ searchTerm, searchCriteria }) {
                     onClick={() =>
                       handleExamineButtonClick(
                         row.exam,
-                        row.exam_id,
+                        row.id,
                         "검정고시합격증명서"
                       )
                     }
@@ -262,7 +262,7 @@ function DocumentReviewTable({ searchTerm, searchCriteria }) {
                     onClick={() =>
                       handleExamineButtonClick(
                         row.record_replacement,
-                        row.record_replacement_id,
+                        row.id,
                         "생활기록부대체양식"
                       )
                     }
@@ -276,7 +276,7 @@ function DocumentReviewTable({ searchTerm, searchCriteria }) {
                     onClick={() =>
                       handleExamineButtonClick(
                         row.basicLiving,
-                        row.basicLiving_id,
+                        row.id,
                         "기초생활수급자증명서"
                       )
                     }
@@ -290,7 +290,7 @@ function DocumentReviewTable({ searchTerm, searchCriteria }) {
                     onClick={() =>
                       handleExamineButtonClick(
                         row.identity_file,
-                        row.identity_file_id,
+                        row.id,
                         "주민등록본"
                       )
                     }
@@ -304,7 +304,7 @@ function DocumentReviewTable({ searchTerm, searchCriteria }) {
                     onClick={() =>
                       handleExamineButtonClick(
                         row.physical_100_file,
-                        row.physical_100_file_id,
+                        row.id,
                         "국민체력100인증서"
                       )
                     }
@@ -318,7 +318,7 @@ function DocumentReviewTable({ searchTerm, searchCriteria }) {
                     onClick={() =>
                       handleExamineButtonClick(
                         row.physical_100_result,
-                        row.physical_100_result_id,
+                        row.id,
                         "체력평가"
                       )
                     }
@@ -335,6 +335,7 @@ function DocumentReviewTable({ searchTerm, searchCriteria }) {
         <DocumentReviewPopUp
           onClose={handleClosePopup}
           selectedId={selectedId}
+          documentType={documentType}
         />
       )}
       <BottomBar
