@@ -1,7 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import refreshicon from "../../assets/update_icon.png";
-import helpicon from "../../assets/help_icon.png";
 import { useNavigate } from "react-router-dom";
 
 const TopBarContainer = styled.div`
@@ -69,8 +67,6 @@ function Header({ title }) {
     <TopBarContainer>
       <Title>{title}</Title>
       <TopBarRight>
-        <Icon src={refreshicon} alt="refresh-icon" type="refresh" />
-        <Icon src={helpicon} alt="help-icon" type="help" />
         <ProfileName>차은우님</ProfileName>
         <LogoutButton onClick={handleLogout}>로그아웃</LogoutButton>
       </TopBarRight>
