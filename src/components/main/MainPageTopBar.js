@@ -1,5 +1,15 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
+
+// 글로벌 스타일로 웹 폰트 정의
+const GlobalStyle = createGlobalStyle`
+  @font-face {
+    font-family: 'SBAggroB';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroM.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+`;
 
 const MainContainerTop = styled.div`
   width: 96%;
@@ -13,7 +23,7 @@ const MainContainerTop = styled.div`
 const Logo = styled.p`
   font-size: 2rem;
   color: white;
-  font-family: "SBAggro", sans-serif;
+  font-family: "SBAggroB", sans-serif;
 `;
 
 const LogoutButton = styled.button`
@@ -34,10 +44,13 @@ function MainPageTopBar() {
     window.location.href = "/login";
   };
   return (
-    <MainContainerTop>
-      <Logo>AIMS</Logo>
-      <LogoutButton onClick={handleLogout}>로그아웃</LogoutButton>
-    </MainContainerTop>
+    <>
+      <GlobalStyle />
+      <MainContainerTop>
+        <Logo>AIMS</Logo>
+        <LogoutButton onClick={handleLogout}>로그아웃</LogoutButton>
+      </MainContainerTop>
+    </>
   );
 }
 
