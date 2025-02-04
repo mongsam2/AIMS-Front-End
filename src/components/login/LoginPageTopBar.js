@@ -1,5 +1,14 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
+
+const GlobalStyle = createGlobalStyle`
+  @font-face {
+    font-family: 'SBAggroB';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroM.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+`;
 
 const LoginPageContainerTop = styled.div`
   width: 96%;
@@ -13,14 +22,17 @@ const LoginPageContainerTop = styled.div`
 const LoginPageContainerLogo = styled.p`
   font-size: 2rem;
   color: white;
-  font-family: "SBAggro", sans-serif;
+  font-family: "SBAggroB", sans-serif;
 `;
 
 function LoginPageTopBar() {
   return (
-    <LoginPageContainerTop>
-      <LoginPageContainerLogo>AIMS</LoginPageContainerLogo>
-    </LoginPageContainerTop>
+    <>
+      <GlobalStyle />
+      <LoginPageContainerTop>
+        <LoginPageContainerLogo>AIMS</LoginPageContainerLogo>
+      </LoginPageContainerTop>
+    </>
   );
 }
 
