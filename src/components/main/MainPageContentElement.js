@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import helpicon from "../../assets/help_icon.png";
-import icon from "../../assets/file.png";
+import axios from "axios";
+
+import icon1 from "../../assets/aims1.png";
+import icon2 from "../../assets/aims2.png";
+import icon3 from "../../assets/aims3.png";
 
 const MainContainerInfoTop = styled.div`
   display: flex;
@@ -14,13 +17,7 @@ const MainContainerInfoTop = styled.div`
 const AdminInfo = styled.p`
   color: rgba(0, 0, 0, 0.7);
   margin: 0;
-  font-size: 1.3rem;
-`;
-
-const HelpIcon = styled.img`
-  width: 1.5rem;
-  height: 1.5rem;
-  margin-right: 1.5rem;
+  font-size: 1.6rem;
 `;
 
 const MainInfoContainerText = styled.div`
@@ -75,18 +72,27 @@ const MainContainerContentChoiceItemLine = styled.div`
 `;
 
 const MainPageItemIcon = styled.img`
-  width: 50%;
-  height: 40%;
+  width: 75%;
+  height: 55%;
   margin-bottom: 10%;
 `;
 
 const MainPageItemText = styled.p`
   color: rgba(0, 0, 0, 0.8);
   font-weight: bold;
-  font-size: 2rem;
+  font-size: 2.5rem;
 `;
 
 function MainPageContentElement({}) {
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    axios
+      .get("http://3.37.240.199/api/users/profile/", { withCredentials: true })
+      .then((response) => setUsername(response.data.username))
+      .catch((error) => console.error("Error fetching user profile:", error));
+  }, []);
+
   const handleDocumentReviewClick = () => {
     window.location.href = "/document-review";
   };
@@ -101,23 +107,23 @@ function MainPageContentElement({}) {
   return (
     <>
       <MainContainerInfoTop>
-        <HelpIcon src={helpicon} alt="help-icon" />
-        <AdminInfo>차은우님</AdminInfo>
+        <AdminInfo style={{ marginRight: "0.3rem" }}>{username}</AdminInfo>
+        <AdminInfo>님</AdminInfo>
       </MainContainerInfoTop>
       <MainInfoContainerText>담당 업무를 선택하세요</MainInfoContainerText>
       <MainContainerContentChoice>
         <MainContainerContentChoiceItem onClick={handleDocumentReviewClick}>
-          <MainPageItemIcon src={icon} alt="icon" />
+          <MainPageItemIcon src={icon2} alt="icon" />
           <MainPageItemText>입학 서류 검토</MainPageItemText>
         </MainContainerContentChoiceItem>
         <MainContainerContentChoiceItemLine />
         <MainContainerContentChoiceItem onClick={handleStudentRecordClick}>
-          <MainPageItemIcon src={icon} alt="icon" />
+          <MainPageItemIcon src={icon1} alt="icon" />
           <MainPageItemText>생활기록부 및 면접 평가</MainPageItemText>
         </MainContainerContentChoiceItem>
         <MainContainerContentChoiceItemLine />
         <MainContainerContentChoiceItem onClick={handleEssayTestClick}>
-          <MainPageItemIcon src={icon} alt="icon" />
+          <MainPageItemIcon src={icon3} alt="icon" />
           <MainPageItemText>논술</MainPageItemText>
         </MainContainerContentChoiceItem>
       </MainContainerContentChoice>
