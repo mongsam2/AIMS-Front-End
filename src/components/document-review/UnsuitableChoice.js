@@ -1,26 +1,54 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 const TableSelect = styled.div`
   display: flex;
   justify-content: left;
   align-items: center;
   width: 100%;
-  height: 4%;
+  height: 4.5%;
   background-color: white;
 `;
 
-const Button = styled.button`
-  width: 3.5%;
+const ButtonSet = styled.div`
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  width: 15%;
   height: 100%;
-  font-size: 1.3rem;
+  position: relative;
+`;
+
+const Button = styled.button`
+  width: 33%;
+  height: 100%;
+  font-size: 1.55rem;
   background-color: white;
   color: rgba(0, 0, 0, 0.4);
   font-weight: bold;
   border: none;
+  position: relative;
+
   &.selected {
     color: #3c50aa;
-    border-bottom: 3px solid #3c50aa;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: transparent;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    transform: scaleX(0);
+  }
+
+  &.selected::after {
+    background-color: #3c50aa;
+    transform: scaleX(1);
   }
 `;
 
@@ -31,33 +59,56 @@ const TableSelectBar = styled.span`
 `;
 
 function UnsuitableChoice({ onFilterChange }) {
-  const [selectedFilter, setSelectedFilter] = useState("unsuit");
+  const [selectedFilter, setSelectedFilter] = useState("전체");
+  const underlineRef = useRef(null);
+
   const handleFilterClick = (filter) => {
     setSelectedFilter(filter);
     onFilterChange(filter);
   };
+
+  useEffect(() => {
+    const activeButton = document.querySelector(`.${selectedFilter}`);
+    if (activeButton && underlineRef.current) {
+      underlineRef.current.style.left = `${activeButton.offsetLeft}px`;
+      underlineRef.current.style.width = `${activeButton.offsetWidth}px`;
+    }
+  }, [selectedFilter]);
+
   return (
     <TableSelect>
-      <Button
-        className={selectedFilter === "suit" ? "selected" : ""}
-        onClick={() => handleFilterClick("suit")}
-      >
-        전체
-      </Button>
-      <TableSelectBar />
-      <Button
-        className={selectedFilter === "suitable" ? "selected" : ""}
-        onClick={() => handleFilterClick("suitable")}
-      >
-        적합
-      </Button>
-      <TableSelectBar />
-      <Button
-        className={selectedFilter === "unsuit" ? "selected" : ""}
-        onClick={() => handleFilterClick("unsuit")}
-      >
-        부적합
-      </Button>
+      <ButtonSet>
+        <Button
+          className={`전체 ${selectedFilter === "전체" ? "selected" : ""}`}
+          onClick={() => handleFilterClick("전체")}
+        >
+          전체
+        </Button>
+        <TableSelectBar />
+        <Button
+          className={`적합 ${selectedFilter === "적합" ? "selected" : ""}`}
+          onClick={() => handleFilterClick("적합")}
+        >
+          적합
+        </Button>
+        <TableSelectBar />
+        <Button
+          className={`부적합 ${selectedFilter === "부적합" ? "selected" : ""}`}
+          onClick={() => handleFilterClick("부적합")}
+        >
+          부적합
+        </Button>
+        <div
+          ref={underlineRef}
+          style={{
+            position: "absolute",
+            bottom: 0,
+            height: "3px",
+            backgroundColor: "#3c50aa",
+            transition: "left 0.3s ease, width 0.3s ease",
+          }}
+        />
+      </ButtonSet>
     </TableSelect>
   );
 }

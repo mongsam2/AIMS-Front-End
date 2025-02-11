@@ -6,7 +6,7 @@ const BottomBarContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 7%;
+  height: 10%;
   background-color: white;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 `;
@@ -14,13 +14,13 @@ const BottomBarContainer = styled.div`
 const PageNumber = styled.span`
   width: auto;
   color: rgba(0, 0, 0, 0.5);
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   margin-left: 2%;
 `;
 
 const Pagination = styled.span`
   padding: 0 1.1rem;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   color: rgba(0, 0, 0, 0.5);
 `;
 
@@ -43,16 +43,16 @@ const BottomBarButton = styled.button`
   background-color: white;
   color: rgba(0, 0, 0, 0.5);
   transition: background-color 0.3s, font-weight 0.3s;
-  border-color: rgba(0, 0, 0, 0.2);
-  border-radius: 0.8rem;
+  border-radius: 0.5rem;
+  border: none;
   width: 2.1rem;
   height: auto;
   font-size: 1.4rem;
   font-weight: 500;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.2);
-    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.1);
+    font-weight: 700;
   }
 `;
 

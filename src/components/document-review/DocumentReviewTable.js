@@ -3,10 +3,11 @@ import styled from "styled-components";
 import axios from "axios";
 import DocumentReviewPopUp from "./DocumentReviewPopUp";
 import BottomBar from "./DocumentBottomBar";
+import sort from "../../assets/sort.png";
 
 const TableContainer = styled.div`
   width: 100%;
-  height: 80%;
+  height: 76%;
   overflow-x: auto;
   overflow-y: auto;
   background-color: hwb(220 94% 2%);
@@ -16,7 +17,9 @@ const ReviewTable = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
+  height: 99.7%;
+  border-top: 2px solid rgba(30, 120, 255, 0.3);
+  border-bottom: 2px solid rgba(30, 120, 255, 0.3);
 `;
 
 const TableHeader = styled.div`
@@ -25,21 +28,30 @@ const TableHeader = styled.div`
   align-items: center;
   width: 100%;
   background-color: #f2f2f2;
-  height: 5%;
+  background-color: rgba(105, 188, 255, 0.25);
+  height: 6%;
+  border-bottom: 1px solid rgba(30, 120, 255, 0.3);
 `;
 
 const TableCellHeader = styled.div`
   width: ${({ width }) => width || "auto"};
   height: 100%;
-  border: 1px solid #f7f9fc;
+  border-right: 1px solid rgba(30, 120, 255, 0.3);
   box-sizing: border-box;
-  font-weight: 500;
-  font-size: 1.3rem;
-  color: ${({ color }) => color || "rgba(0, 0, 0, 0.9)"};
+  font-weight: 600;
+  font-size: 1.44rem;
+  color: ${({ color }) => color || "rgba(0, 0, 0, 0.75)"};
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: ${({ bgColor }) => bgColor || "#F7F9FCCC"};
+  position: relative;
+
+  .sort-icon {
+    position: absolute;
+    right: 10px;
+  }
+
   input.table-checkbox {
     width: 100%;
     height: 21%;
@@ -49,11 +61,11 @@ const TableCellHeader = styled.div`
 const TableCell = styled.div`
   width: ${({ width }) => width || "auto"};
   height: 100%;
-  border: 1px solid #f7f9fc;
+  border-right: 1px solid rgba(222, 222, 222, 0.61);
   box-sizing: border-box;
   font-weight: 500;
-  font-size: 1.4rem;
-  color: ${({ color }) => color || "rgba(0, 0, 0, 0.6)"};
+  font-size: 1.44rem;
+  color: ${({ color }) => color || "rgba(0, 0, 0, 0.75)"};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -74,8 +86,8 @@ const TableBody = styled.div`
 const TableRow = styled.div`
   display: flex;
   background-color: ${({ isChecked }) => (isChecked ? "#d3e3fe" : "white")};
-  border-bottom: 1px solid #ddd;
-  height: 6.6%;
+  border-bottom: 1px solid rgba(222, 222, 222, 0.61);
+  height: 8.3%;
 `;
 
 const TableButton = styled.button`
@@ -84,31 +96,48 @@ const TableButton = styled.button`
   background-color: ${({ bgColor }) => bgColor || "#f7f9fc"};
   color: ${({ color }) => color || "#c97a20"};
   border: none;
-  border-radius: 5px;
-  font-size: 1.3rem;
+  border-radius: 0px;
+  font-size: 1.45rem;
   font-weight: 500;
   cursor: pointer;
+`;
+
+const SortIcon = styled.img`
+  width: 1.6rem;
+  height: auto;
+  margin-left: 5px;
 `;
 
 function getButtonStyles(status) {
   switch (status) {
     case "미제출":
-      return { bgColor: "rgba(255, 136, 123, 0.42)", color: "#c97a20" };
+      return {
+        bgColor: "rgba(237, 237, 237, 0.57)",
+        color: "rgba(140, 140, 140, 0.7)",
+      };
     case "검토":
       return {
-        bgColor: "rgba(252, 183, 33, 0.45)",
+        bgColor: "rgba(255, 60, 60, 0.45)",
         color: "rgba(66, 44, 1, 0.59)",
       };
     case "제출":
       return {
-        bgColor: "rgba(197, 200, 253, 0.23)",
+        bgColor: "rgba(197, 200, 253, 0.4)",
         color: "rgba(7, 0, 111, 0.48)",
       };
     case "해당없음":
-      return { bgColor: "white", color: "rgba(0, 0, 0, 0.2)" };
+      return {
+        bgColor: "rgb(0, 0, 0,0.02)",
+        color: "rgba(0, 0, 0, 0)",
+      };
     default:
       return { bgColor: "#f9fafd", color: "rgba(0, 0, 0, 0.6)" };
   }
+}
+
+function formatPhoneNumber(phoneNumber) {
+  if (!phoneNumber) return "";
+  return phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
 }
 
 function DocumentReviewTable({ searchTerm, admissionType, filter }) {
@@ -116,20 +145,39 @@ function DocumentReviewTable({ searchTerm, admissionType, filter }) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 15; // 페이지당 항목 수
+  const itemsPerPage = 12;  
   const [documentType, setDocumentType] = useState(null);
-  const [totalItemsCount, setTotalItemsCount] = useState(0); // 총 항목 수 상태 추가
+  const [totalItemsCount, setTotalItemsCount] = useState(0); 
   const [sortConfig, setSortConfig] = useState({
-    key: null,
+    key: "id",
     direction: "ascending",
-  }); // 정렬 상태 추가
+  }); 
+  const [selectedName, setSelectedName] = useState(null);
+  const [selectedDepartment, setSelectedDepartment] = useState(null);
+  const [selectedApplicantType, setSelectedApplicantType] = useState(null);
+  const [selectedPhone, setSelectedPhone] = useState(null);
 
-  const handleExamineButtonClick = (status, id, documentType) => {
+  const getDisplayText = (status) => {
+    return status === "제출" ? "완료" : status;
+  };
+
+  const handleExamineButtonClick = (
+    status,
+    id,
+    documentType,
+    name,
+    department,
+    applicant_type,
+    phone
+  ) => {
     if (status === "검토" || status === "제출") {
       setIsPopupOpen(true);
       setSelectedId(id);
       setDocumentType(documentType);
-      console.log("Document Type:", documentType);
+      setSelectedName(name);
+      setSelectedDepartment(department);
+      setSelectedApplicantType(applicant_type);
+      setSelectedPhone(phone);
     }
   };
 
@@ -154,33 +202,40 @@ function DocumentReviewTable({ searchTerm, admissionType, filter }) {
 
   const loadData = async () => {
     try {
-      const response = await axios.get("http://3.37.240.199/api/applicants/");
-      const results = response.data.results.map((item) => {
-        const documentStatus = item.documents.reduce((acc, doc) => {
-          acc[doc.document_type] = { status: doc.status, id: doc.id };
-          return acc;
-        }, {});
+      const response = await axios.get("http://3.37.240.199/api/students/");
+      const results = response.data.map((item) => {
+        const documentStatus = {
+          학생생활기록부: item.documents["학생생활기록부"] || "해당없음",
+          검정고시합격증명서:
+            item.documents["검정고시합격증명서"] || "해당없음",
+          생활기록부대체양식:
+            item.documents["생활기록부대체양식"] || "해당없음",
+          기초생활수급자증명서:
+            item.documents["기초생활수급자증명서"] || "해당없음",
+          주민등록초본: item.documents["주민등록초본"] || "해당없음",
+          국민체력100: item.documents["국민체력100"] || "해당없음",
+          체력평가: item.documents["체력평가"] || "해당없음",
+        };
 
         return {
-          id: item.student_id,
+          id: item.id,
           name: item.name,
           department: item.department,
           phone: item.phone,
           applicant_type: item.applicant_type,
-          record: documentStatus["학생생활기록부"]?.status || "",
-          exam: documentStatus["검정고시합격증명서"]?.status || "",
-          record_replacement:
-            documentStatus["생활기록부대체양식"]?.status || "",
-          basicLiving: documentStatus["수급자증명서"]?.status || "",
-          identity_file: documentStatus["주민등록본"]?.status || "",
-          physical_100_file: documentStatus["국민체력100인증서"]?.status || "",
-          physical_100_result: documentStatus["체력평가"]?.status || "",
+          record: documentStatus["학생생활기록부"],
+          exam: documentStatus["검정고시합격증명서"],
+          record_replacement: documentStatus["생활기록부대체양식"],
+          basicLiving: documentStatus["기초생활수급자증명서"],
+          identity_file: documentStatus["주민등록초본"],
+          physical_100_file: documentStatus["국민체력100"],
+          physical_100_result: documentStatus["체력평가"],
           isChecked: false,
         };
       });
 
       setTableData(results);
-      setTotalItemsCount(response.data.count); // 총 항목 수 설정
+      setTotalItemsCount(response.data.length); 
     } catch (error) {
       console.error("데이터 로드 실패:", error);
     }
@@ -191,26 +246,38 @@ function DocumentReviewTable({ searchTerm, admissionType, filter }) {
   }, []);
 
   const filteredItems = tableData.filter((item) => {
+    if (item.id === "20250000") return false;
+
     const matchesSearchTerm =
       item.name.includes(searchTerm) || item.id.includes(searchTerm);
     const matchesAdmissionType =
       admissionType === "전체" || item.applicant_type === admissionType;
 
     let matchesFilter = true;
-    if (filter === "unsuit") {
-      matchesFilter = Object.values(item).some(
+    const docStatuses = [
+      item.record,
+      item.exam,
+      item.record_replacement,
+      item.basicLiving,
+      item.identity_file,
+      item.physical_100_file,
+      item.physical_100_result,
+    ];
+
+    if (filter === "부적합") {
+      matchesFilter = docStatuses.some(
         (status) => status === "미제출" || status === "검토"
       );
-    } else if (filter === "suitable") {
-      matchesFilter = Object.values(item).some(
-        (status) => status === "제출" || status === null
+    } else if (filter === "적합") {
+      matchesFilter = docStatuses.every(
+        (status) => status !== "미제출" && status !== "검토"
       );
     }
 
     return matchesSearchTerm && matchesAdmissionType && matchesFilter;
   });
 
-  const totalFilteredItemsCount = filteredItems.length; // 필터링된 항목 수
+  const totalFilteredItemsCount = filteredItems.length;
 
   const sortedItems = React.useMemo(() => {
     let sortableItems = [...filteredItems];
@@ -250,13 +317,32 @@ function DocumentReviewTable({ searchTerm, admissionType, filter }) {
         <ReviewTable>
           <TableHeader>
             <TableCellHeader width="4%">#</TableCellHeader>
-            <TableCellHeader width="9%" onClick={() => handleSort("id")}>
+            <TableCellHeader
+              width="8%"
+              onClick={() => handleSort("id")}
+              className={
+                sortConfig.key === "id" && sortConfig.direction === "ascending"
+                  ? "sorted-asc"
+                  : ""
+              }
+            >
               수험번호
+              <SortIcon src={sort} alt="sort icon" className="sort-icon" />
             </TableCellHeader>
-            <TableCellHeader width="7%" onClick={() => handleSort("name")}>
+            <TableCellHeader
+              width="6%"
+              onClick={() => handleSort("name")}
+              className={
+                sortConfig.key === "name" &&
+                sortConfig.direction === "ascending"
+                  ? "sorted-asc"
+                  : ""
+              }
+            >
               이름
+              <SortIcon src={sort} alt="sort icon" className="sort-icon" />
             </TableCellHeader>
-            <TableCellHeader width="15%">학과</TableCellHeader>
+            <TableCellHeader width="11%">학과</TableCellHeader>
             <TableCellHeader width="10%">전화번호</TableCellHeader>
             <TableCellHeader width="10%">학생생활기록부</TableCellHeader>
             <TableCellHeader width="10%">검정고시합격증명서</TableCellHeader>
@@ -270,22 +356,15 @@ function DocumentReviewTable({ searchTerm, admissionType, filter }) {
             {currentItems.map((row, index) => (
               <TableRow key={index} isChecked={row.isChecked}>
                 <TableCell width="4%">{indexOfFirstItem + index + 1}</TableCell>
-                <TableCell width="9%">{row.id}</TableCell>
-                <TableCell width="7%">{row.name}</TableCell>
-                <TableCell width="15%">{row.department}</TableCell>
-                <TableCell width="10%">{row.phone}</TableCell>
+                <TableCell width="8%">{row.id}</TableCell>
+                <TableCell width="6%">{row.name}</TableCell>
+                <TableCell width="11%">{row.department}</TableCell>
                 <TableCell width="10%">
-                  <TableButton
-                    {...getButtonStyles(row.record)}
-                    onClick={() =>
-                      handleExamineButtonClick(
-                        row.record,
-                        row.id,
-                        "학생생활기록부"
-                      )
-                    }
-                  >
-                    {row.record}
+                  {formatPhoneNumber(row.phone)}
+                </TableCell>
+                <TableCell width="10%">
+                  <TableButton {...getButtonStyles(row.record)}>
+                    {getDisplayText(row.record)}
                   </TableButton>
                 </TableCell>
                 <TableCell width="10%">
@@ -295,11 +374,15 @@ function DocumentReviewTable({ searchTerm, admissionType, filter }) {
                       handleExamineButtonClick(
                         row.exam,
                         row.id,
-                        "검정고시합격증명서"
+                        "검정고시합격증명서",
+                        row.name,
+                        row.department,
+                        row.applicant_type,
+                        row.phone
                       )
                     }
                   >
-                    {row.exam}
+                    {getDisplayText(row.exam)}
                   </TableButton>
                 </TableCell>
                 <TableCell width="10%">
@@ -309,11 +392,15 @@ function DocumentReviewTable({ searchTerm, admissionType, filter }) {
                       handleExamineButtonClick(
                         row.record_replacement,
                         row.id,
-                        "생활기록부대체양식"
+                        "생활기록부대체양식",
+                        row.name,
+                        row.department,
+                        row.applicant_type,
+                        row.phone
                       )
                     }
                   >
-                    {row.record_replacement}
+                    {getDisplayText(row.record_replacement)}
                   </TableButton>
                 </TableCell>
                 <TableCell width="10%">
@@ -323,11 +410,15 @@ function DocumentReviewTable({ searchTerm, admissionType, filter }) {
                       handleExamineButtonClick(
                         row.basicLiving,
                         row.id,
-                        "수급자증명서"
+                        "기초생활수급자증명서",
+                        row.name,
+                        row.department,
+                        row.applicant_type,
+                        row.phone
                       )
                     }
                   >
-                    {row.basicLiving}
+                    {getDisplayText(row.basicLiving)}
                   </TableButton>
                 </TableCell>
                 <TableCell width="10%">
@@ -337,11 +428,15 @@ function DocumentReviewTable({ searchTerm, admissionType, filter }) {
                       handleExamineButtonClick(
                         row.identity_file,
                         row.id,
-                        "주민등록본"
+                        "주민등록초본",
+                        row.name,
+                        row.department,
+                        row.applicant_type,
+                        row.phone
                       )
                     }
                   >
-                    {row.identity_file}
+                    {getDisplayText(row.identity_file)}
                   </TableButton>
                 </TableCell>
                 <TableCell width="10%">
@@ -351,11 +446,15 @@ function DocumentReviewTable({ searchTerm, admissionType, filter }) {
                       handleExamineButtonClick(
                         row.physical_100_file,
                         row.id,
-                        "국민체력100인증서"
+                        "국민체력100",
+                        row.name,
+                        row.department,
+                        row.applicant_type,
+                        row.phone
                       )
                     }
                   >
-                    {row.physical_100_file}
+                    {getDisplayText(row.physical_100_file)}
                   </TableButton>
                 </TableCell>
                 <TableCell width="10%">
@@ -365,11 +464,15 @@ function DocumentReviewTable({ searchTerm, admissionType, filter }) {
                       handleExamineButtonClick(
                         row.physical_100_result,
                         row.id,
-                        "체력평가"
+                        "체력평가",
+                        row.name,
+                        row.department,
+                        row.applicant_type,
+                        row.phone
                       )
                     }
                   >
-                    {row.physical_100_result}
+                    {getDisplayText(row.physical_100_result)}
                   </TableButton>
                 </TableCell>
               </TableRow>
@@ -382,18 +485,22 @@ function DocumentReviewTable({ searchTerm, admissionType, filter }) {
           onClose={handleClosePopup}
           selectedId={selectedId}
           documentType={documentType}
+          name={selectedName}
+          department={selectedDepartment}
+          applicant_type={selectedApplicantType}
+          id={selectedId}
         />
       )}
       <BottomBar
         currentPage={currentPage}
-        totalPages={Math.ceil(totalFilteredItemsCount / itemsPerPage)} // 필터링된 총 페이지 수 계산
+        totalPages={Math.ceil(totalFilteredItemsCount / itemsPerPage)}
         onNextPage={handleNextPage}
         onPrevPage={handlePrevPage}
         currentItemsRange={`${indexOfFirstItem + 1}-${Math.min(
           indexOfLastItem,
           totalFilteredItemsCount
-        )}`} // 필터링된 항목 범위
-        totalItemsCount={totalFilteredItemsCount} // 필터링된 총 항목 수 전달
+        )}`}
+        totalItemsCount={totalFilteredItemsCount}
       />
     </>
   );
