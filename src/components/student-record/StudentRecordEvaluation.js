@@ -497,7 +497,6 @@ function parseContent(content) {
   if (!content) return [];
   const cleanedContent = content.replace(/\*/g, "").trim();
 
-
   const mainRegex =
     /(\[(학업 역량|진로 역량|창의·융합 역량|공동체 역량)\])([\s\S]*?)(?=\[(학업 역량|진로 역량|창의·융합 역량|공동체 역량)\]|$)/g;
   const pages = [];
@@ -586,7 +585,7 @@ function StudentRecordEvaluation({
         const response = await axios.get(
           `http://3.37.240.199/api/students/score`
         );
-        setScores(response.data.scores);  
+        setScores(response.data.scores);
       } catch (error) {
         console.error("점수 불러오기 실패:", error);
       }
@@ -680,7 +679,7 @@ function StudentRecordEvaluation({
   };
 
   const handleScoreNext = () => {
-    setScoreIndex((prevIndex) => (prevIndex < 3 ? prevIndex + 1 : prevIndex)); 
+    setScoreIndex((prevIndex) => (prevIndex < 3 ? prevIndex + 1 : prevIndex));
   };
 
   const handleCategoryPrevious = () => {

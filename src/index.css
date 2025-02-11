@@ -1,0 +1,15 @@
+html {
+  font-size: 62.5%; /* 1rem = 10px */
+
+  @media screen and (min-width: 1921px) {
+    font-size: 75%; /* 큰 화면에서는 폰트 크기를 더 키움 */
+  }
+
+  @media screen and (max-width: 1920px) {
+    font-size: 62.5%; /* 기본 폰트 크기 유지 */
+  }
+
+  @media screen and (max-width: 1440px) {
+    font-size: 55%;
+  }
+}
