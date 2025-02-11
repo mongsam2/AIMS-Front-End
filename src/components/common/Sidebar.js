@@ -1,8 +1,10 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import logo from "../../assets/aims_logo.png";
-import icon from "../../assets/file.png";
+import logo from "../../assets/logo_3d1.png";
+import icon1 from "../../assets/aims1.png";
+import icon2 from "../../assets/aims2.png";
+import icon3 from "../../assets/aims3.png";
 
 const SidebarContainer = styled.div`
   display: flex;
@@ -10,9 +12,9 @@ const SidebarContainer = styled.div`
   align-items: center;
   justify-content: center;
   width: 4.2%;
-  background-color: #182044;
+  background-color: #112059;
   height: 100vh;
-  border-radius: 0 1rem 1rem 0;
+  border-radius: 0 1rem 0rem 0;
 `;
 
 const SidebarLogo = styled.div`
@@ -80,8 +82,8 @@ const SidebarButton3 = styled.button`
 `;
 
 const ButtonIcon = styled.img`
-  width: 30px;
-  height: 30px;
+  width: 4rem;
+  height: auto;
 `;
 
 function Sidebar() {
@@ -120,7 +122,7 @@ function Sidebar() {
             backgroundColor: getButtonBackgroundColor("/document-review"),
           }}
         >
-          <ButtonIcon src={icon} alt="icon" />
+          <ButtonIcon src={icon2} alt="icon" />
         </SidebarButton1>
         <SidebarButton2
           onClick={handleSideButtonClick2}
@@ -128,13 +130,13 @@ function Sidebar() {
             backgroundColor: getButtonBackgroundColor("/student-record"),
           }}
         >
-          <ButtonIcon src={icon} alt="icon" />
+          <ButtonIcon src={icon1} alt="icon" />
         </SidebarButton2>
         <SidebarButton3
           onClick={handleSideButtonClick3}
           style={{ backgroundColor: getButtonBackgroundColor("/essay-test") }}
         >
-          <ButtonIcon src={icon} alt="icon" />
+          <ButtonIcon src={icon3} alt="icon" />
         </SidebarButton3>
       </SidebarMenu>
     </SidebarContainer>
