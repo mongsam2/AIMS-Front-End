@@ -9,35 +9,33 @@ export const Container = styled.div`
 `;
 
 export const MainContent = styled.div`
-  width: 100%; /* 사이드바 확장에 맞춰 너비 조정 */
+  width: 100%; 
   height: 100vh;
   display: flex;
   flex-direction: column;
   font-family: Arial, sans-serif;
   gap: 0px;
   justify-content: left;
+  background-color: rgba(0, 0, 0, 0.04);
 `;
 
 export const EssayTestContent = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  width: 98%;
-  height: 90%;
-  margin-top: 1%;
-  gap: 2%;
+  width: 100%;
+  height: 94%;
 `;
 
 export const StudentRecordContent = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  width: 98%;
-  height: 90%;
-  margin-top: 1%;
-  gap: 2%;
+  width: 100%;
+  height: 94%;
+  background-color: white;
 `;
 
 export const MainPageContainer = styled.div`
