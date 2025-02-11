@@ -1,5 +1,6 @@
 # AIMS-Front-End
 
+
 ## 1. 페이지 구성
 | 로그인 페이지 | 메뉴 선택 페이지 | 
 |----------|----------|
@@ -17,11 +18,14 @@
 |----------|----------|
 | <img src="https://github.com/user-attachments/assets/66cff702-0ac8-4763-bb74-714910672193" width="500"> | <img src="https://github.com/user-attachments/assets/dc727fe2-0da7-4f1d-9ac3-81bfff7e82f9" width="500"> 
 
+ &nbsp;
+## 2. 기술 스택
+<img src="https://img.shields.io/badge/react-61DAFB.svg?style=for-the-badge&logo=react&logoColor=black" /> &nbsp;  <img src="https://img.shields.io/badge/javascript-F7DF1E.svg?style=for-the-badge&logo=javascript&logoColor=black" />
 
+  <img src="https://img.shields.io/badge/yarn-2C8EBB.svg?style=for-the-badge&logo=yarn&logoColor=white" /> &nbsp; <img src="https://img.shields.io/badge/axios-5A29E4.svg?style=for-the-badge&logo=axios&logoColor=white" />  &nbsp; <img src="https://img.shields.io/badge/vercel-000000.svg?style=for-the-badge&logo=vercel&logoColor=white" />
 
-
-
-## 2. 배포 및 웹사이트 확인
+ &nbsp;
+## 3. 배포 및 웹사이트 확인
 
 이 프로젝트는 오른쪽 링크를 통해서 확인할 수 있습니다.  **🔗 [AIMS 바로가기](https://aims-front-end-nd1k.vercel.app)**
 
@@ -36,7 +40,8 @@
 
 이제 화면이 정상적으로 보일 것입니다.
 
-## 3. 설치 및 실행 방법
+ &nbsp;
+## 4. 설치 및 실행 방법
 
 ### 1. 필수 환경 설정
 
@@ -85,7 +90,7 @@ npm install -g serve  # 또는 yarn global add serve
 serve -s build
 ```
 기본적으로 `http://localhost:3000/`에서 실행됩니다.
-
+ &nbsp;
 ### 5. 추가 사항
 - 이 프로젝트는 **React, Styled-Components, Axios** 등을 사용합니다.
 - `.nvmrc` 파일을 설정하여 정확한 Node.js 버전을 유지하세요:
