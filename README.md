@@ -1,6 +1,27 @@
 # AIMS-Front-End
 
-## 배포 및 웹사이트 확인
+## 1. 페이지 구성
+| 로그인 페이지 | 메뉴 선택 페이지 | 
+|----------|----------|
+| <img src="https://github.com/user-attachments/assets/5ae31df8-5c40-433a-954e-77e5b68fc831" width="600"> | <img src="https://github.com/user-attachments/assets/699b75bd-11f9-4b5d-a0f8-e94048d433f0" width="600"> 
+
+| 어드민 - 파일 업로드 페이지 | 입학 서류 검토 페이지 | 
+|----------|----------|
+| <img src="https://github.com/user-attachments/assets/848fd32d-4528-4599-aa17-deb60eddb3f0" width="500">  | <img src="https://github.com/user-attachments/assets/9a63e85d-6bb2-409e-b4bd-4aa3edbf6ff4" width="500">
+
+| 분류 실패 팝업 창 | 서류 팝업 창 | 
+|----------|----------|
+| <img src="https://github.com/user-attachments/assets/ff4866f2-119d-492c-a8d4-7786e06b4473" width="500"> | <img src="https://github.com/user-attachments/assets/496719f9-2d04-4899-8b24-7d39827e6d72" width="500"> 
+
+| 생활기록부 및 면접 평가 페이지 | 논술 평가 페이지 | 
+|----------|----------|
+| <img src="https://github.com/user-attachments/assets/66cff702-0ac8-4763-bb74-714910672193" width="500"> | <img src="https://github.com/user-attachments/assets/dc727fe2-0da7-4f1d-9ac3-81bfff7e82f9" width="500"> 
+
+
+
+
+
+## 2. 배포 및 웹사이트 확인
 
 이 프로젝트는 오른쪽 링크를 통해서 확인할 수 있습니다.  **🔗 [AIMS 바로가기](https://aims-front-end-nd1k.vercel.app)**
 
@@ -15,7 +36,7 @@
 
 이제 화면이 정상적으로 보일 것입니다.
 
-## 설치 및 실행 방법
+## 3. 설치 및 실행 방법
 
 ### 1. 필수 환경 설정
 
