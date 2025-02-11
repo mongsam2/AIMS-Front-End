@@ -1,7 +1,6 @@
 import React from "react";
 import styled, { createGlobalStyle } from "styled-components";
 
-// 글로벌 스타일로 웹 폰트 정의
 const GlobalStyle = createGlobalStyle`
   @font-face {
     font-family: 'SBAggroB';
@@ -41,7 +40,7 @@ const LogoutButton = styled.button`
 
 function MainPageTopBar() {
   const handleLogout = () => {
-    window.location.href = "/login";
+    window.location.href = "/";
   };
   return (
     <>
