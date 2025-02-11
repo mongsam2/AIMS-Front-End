@@ -18,16 +18,25 @@ function StudentRecord() {
   const [selectedMemo, setSelectedMemo] = useState(null);
   const [selectedEvaluation, setSelectedEvaluation] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
+  const [selectedScore1, setSelectedScore1] = useState(null);
+  const [selectedScore2, setSelectedScore2] = useState(null);
+  const [selectedScore3, setSelectedScore3] = useState(null);
+  const [selectedScore4, setSelectedScore4] = useState(null);
 
   const handleRowSelect = (id) => {
     setSelectedId(id);
     axios
-      .get(`http://3.37.240.199/api/documents/student-records/${id}/`)
+      .get(`http://3.37.240.199/api/student-records/${id}/`)
       .then((response) => {
-        setSelectedFileUrl(response.data.file_url);
-        setSelectedContent(response.data.content);
-        setSelectedQuestion(response.data.question);
-        setSelectedMemo(response.data.memo);
+        const data = response.data;
+        setSelectedFileUrl(data.file);
+        setSelectedContent(data.summarization.content);
+        setSelectedQuestion(data.summarization.question);
+        setSelectedMemo(data.memo);
+        setSelectedScore1(data.score1);
+        setSelectedScore2(data.score2);
+        setSelectedScore3(data.score3);
+        setSelectedScore4(data.score4);
       })
       .catch((error) => {
         console.error("API 호출 중 오류가 발생했습니다:", error);
@@ -36,12 +45,9 @@ function StudentRecord() {
 
   const updateMemo = (newMemo, selectedId) => {
     axios
-      .post(
-        `http://3.37.240.199/api/documents/student-records/${selectedId}/`,
-        {
-          memo: newMemo,
-        }
-      )
+      .patch(`http://3.37.240.199/api/student-records/${selectedId}/memo/`, {
+        memo: newMemo,
+      })
       .then((response) => {
         setSelectedMemo(response.data.memo);
       })
@@ -65,6 +71,10 @@ function StudentRecord() {
             evaluation={selectedEvaluation}
             onUpdateMemo={updateMemo}
             id={selectedId}
+            score1={selectedScore1}
+            score2={selectedScore2}
+            score3={selectedScore3}
+            score4={selectedScore4}
           />
         </StudentRecordContent>
       </MainContent>
