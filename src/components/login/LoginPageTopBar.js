@@ -1,5 +1,6 @@
 import React from "react";
 import styled, { createGlobalStyle } from "styled-components";
+import logoicon from "../../assets/aims_logo.png";
 
 const GlobalStyle = createGlobalStyle`
   @font-face {
@@ -14,9 +15,15 @@ const LoginPageContainerTop = styled.div`
   width: 96%;
   height: 10%;
   display: flex;
-  justify-content: space-between;
+  justify-content: left;
   align-items: center;
   margin-bottom: 1%;
+  gap: 0.5rem;
+`;
+
+const LoginPageContainerLogoImg = styled.img`
+  width: 3.4rem;
+  height: 2.3rem;
 `;
 
 const LoginPageContainerLogo = styled.p`
