@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const VisualizeStudentRecord = styled.div`
-  width: 40%;
+  width: 48%;
   height: 100%;
   background-color: #f9fafd;
   color: rgba(0, 0, 0, 0.3);
@@ -18,20 +18,16 @@ const VisualizeStudentRecordPDF = styled.iframe`
 `;
 
 function StudentRecordPDFViewer({ fileUrl }) {
-  const baseUrl = "http://3.37.240.199"; // 서버의 도메인 이름
-
   return (
     <VisualizeStudentRecord>
       <VisualizeStudentRecordPDF
         title="PDF Viewer"
-        src={fileUrl ? `${baseUrl}${fileUrl}` : ""}
+        src={fileUrl ? `${fileUrl}#toolbar=0&zoom=155` : "about:blank"}
         width="100%"
         height="600px"
       >
         이 브라우저는 PDF 파일을 지원하지 않습니다.
-        <a href={fileUrl ? `${baseUrl}${fileUrl}` : ""}>
-          여기에서 PDF를 다운로드하세요.
-        </a>
+        <a href={fileUrl ? `${fileUrl}` : ""}>여기에서 PDF를 다운로드하세요.</a>
       </VisualizeStudentRecordPDF>
     </VisualizeStudentRecord>
   );
