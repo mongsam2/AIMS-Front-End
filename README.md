@@ -19,26 +19,14 @@
 | <img src="https://github.com/user-attachments/assets/66cff702-0ac8-4763-bb74-714910672193" width="500"> | <img src="https://github.com/user-attachments/assets/dc727fe2-0da7-4f1d-9ac3-81bfff7e82f9" width="500"> 
 
 &nbsp;
-
-## 2. 배포 및 웹사이트 확인
-이 프로젝트는 오른쪽 링크를 통해서 확인할 수 있습니다.  **🔗 [AIMS 바로가기](https://aims-front-end-nd1k.vercel.app)**
-### 📌 웹페이지 열기 전 주의사항 
-이 프로젝트는 반응형 웹이 아니므로, **Google 개발자 도구에서 특정 화면 크기로 확인해야 합니다.**
-1. **Chrome 브라우저에서 사이트 열기**
-2. **개발자 도구 실행** (`F12` 또는 `Ctrl + Shift + I` / macOS: `Cmd + Option + I`)
-3. **디바이스 툴바 클릭** (작은 스마트폰 아이콘 또는 `Ctrl + Shift + M`)
-4. **해상도 직접 입력** → `3024 x 1964`로 설정
-이제 화면이 정상적으로 보일 것입니다.
- &nbsp;
- 
-## 3. 기술 스택
+## 2. 기술 스택
 <img src="https://img.shields.io/badge/react-61DAFB.svg?style=for-the-badge&logo=react&logoColor=black" /> &nbsp;  <img src="https://img.shields.io/badge/javascript-F7DF1E.svg?style=for-the-badge&logo=javascript&logoColor=black" />
 
   <img src="https://img.shields.io/badge/yarn-2C8EBB.svg?style=for-the-badge&logo=yarn&logoColor=white" /> &nbsp; <img src="https://img.shields.io/badge/axios-5A29E4.svg?style=for-the-badge&logo=axios&logoColor=white" />  &nbsp; <img src="https://img.shields.io/badge/vercel-000000.svg?style=for-the-badge&logo=vercel&logoColor=white" />
 
 
  &nbsp;
-## 4. 설치 및 실행 방법
+## 3. 설치 및 실행 방법
 
 ### 1. 필수 환경 설정
 
