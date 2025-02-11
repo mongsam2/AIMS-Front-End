@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import helpicon from "../../assets/help_icon.png";
-import icon from "../../assets/file.png";
 import axios from "axios";
+
+import icon1 from "../../assets/aims1.png";
+import icon2 from "../../assets/aims2.png";
+import icon3 from "../../assets/aims3.png";
+import arrow_down from "../../assets/arrow_down.png";
 
 const MainContainerInfoTop = styled.div`
   display: flex;
@@ -18,22 +21,104 @@ const AdminInfo = styled.p`
   font-size: 1.3rem;
 `;
 
-const HelpIcon = styled.img`
-  width: 1.5rem;
-  height: 1.5rem;
-  margin-right: 1.5rem;
+const MainInfoContainerTextSet = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 97%;
+  height: 20%;
+  gap: 2rem;
 `;
 
 const MainInfoContainerText = styled.div`
   color: rgba(0, 0, 0, 1);
   margin: 0;
-  font-size: 2.5rem;
+  font-size: 2.8rem;
   font-weight: bold;
   width: 97%;
-  height: 20%;
+  height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const MainInfoContainerEssayText = styled.div`
+  color: rgb(255, 90, 90);
+  margin-top: 0.5rem;
+  font-size: 1.6rem;
+  font-weight: bold;
+  width: 97%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const MainContainerEssayCriteria = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  align-items: center;
+  width: 97%;
+  height: 5%;
+  margin-right: 33rem;
+`;
+
+const CriteriaSelectContainer = styled.div`
+  position: relative;
+  width: 20rem;
+  height: 3rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border: 3px solid #ccc;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgba(0, 0, 0, 0.8);
+`;
+
+const CriteriaSelectList = styled.ul`
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 10rem;
+  overflow-y: auto;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  list-style: none;
+  margin: 0;
+  z-index: 1000;
+`;
+
+const CriteriaSelectListItem = styled.li`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  border: 2px solid #ccc;
+  font-size: 1.4rem;
+  padding: 15px 0;
+  font-weight: ${({ isSelected }) => (isSelected ? "bold" : "500")};
+  background-color: ${({ isSelected }) =>
+    isSelected ? "#a9d1f8" : "transparent"};
+  &:hover {
+    background-color: #a9d1f8;
+    font-weight: bold;
+  }
+`;
+
+const ArrowIcon = styled.img`
+  position: absolute;
+  right: 1rem;
+  width: 1.2rem;
+  height: 1.2rem;
+  transition: transform 0.3s ease;
+  transform: rotate(${(props) => (props.isopen ? "180deg" : "0deg")});
 `;
 
 const MainContainerContentChoice = styled.div`
@@ -76,66 +161,202 @@ const MainContainerContentChoiceItemLine = styled.div`
 `;
 
 const MainPageItemIcon = styled.img`
-  width: 50%;
-  height: 40%;
+  width: 75%;
+  height: 55%;
   margin-bottom: 10%;
 `;
 
 const MainPageItemText = styled.p`
   color: rgba(0, 0, 0, 0.8);
   font-weight: bold;
-  font-size: 2rem;
+  font-size: 2.5rem;
 `;
 
 function AdminPageContentElement({}) {
+  const [uploadMessage, setUploadMessage] = useState("");
+  const [messageColor, setMessageColor] = useState("blue");
+  const [criteriaList, setCriteriaList] = useState([]);
+  const [selectedCriteria, setSelectedCriteria] = useState(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchCriteria = async () => {
+      try {
+        const response = await axios.get(
+          "http://3.37.240.199/api/essays/criterias/"
+        );
+        setCriteriaList(response.data);
+      } catch (error) {
+        console.error("Error fetching criteria:", error);
+      }
+    };
+
+    fetchCriteria();
+  }, []);
+
   const handleDocumentReviewClick = () => {
-    document.getElementById("document-upload").click();
+    const inputElement = document.getElementById("document-upload");
+    inputElement.click();
+    inputElement.onchange = async (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+          const response = await axios.post(
+            "http://3.37.240.199/api/documents/",
+            formData
+          );
+
+          if (response.status !== 201) {
+            throw new Error("파일 업로드 실패");
+          }
+          setUploadMessage("파일이 업로드 되었습니다.");
+          setMessageColor("blue");
+        } catch (error) {
+          console.error("Error:", error);
+          setUploadMessage("파일 업로드 중 오류가 발생했습니다.");
+          setMessageColor("red");
+        } finally {
+          setTimeout(() => {
+            setUploadMessage("");
+          }, 9000);
+        }
+      }
+    };
   };
 
   const handleStudentRecordClick = () => {
-    document.getElementById("student-record-upload").click();
+    const inputElement = document.getElementById("student-record-upload");
+    inputElement.click();
+    inputElement.onchange = async (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+          const response = await axios.post(
+            "http://3.37.240.199/api/student-records/",
+            formData
+          );
+
+          if (response.status !== 201) {
+            throw new Error("파일 업로드 실패");
+          }
+          setUploadMessage("파일이 업로드 되었습니다.");
+          setMessageColor("blue");
+        } catch (error) {
+          console.error("Error:", error);
+          if (error.response && error.response.status === 406) {
+            setUploadMessage("이미 제출한 지원자의 파일이 포함되어있습니다.");
+            setMessageColor("red");
+          } else {
+            setUploadMessage("파일 업로드 중 오류가 발생했습니다.");
+            setMessageColor("red");
+          }
+        } finally {
+          setTimeout(() => {
+            setUploadMessage("");
+          }, 9000);
+        }
+      }
+    };
   };
 
   const handleEssayTestClick = () => {
     document.getElementById("essay-upload").click();
   };
 
-  const handleFileChange = async(event, type) => {
-    const files = event.target.files;
-    // 각 타입에 따라 다른 로직을 구현합니다.
-      for (let i = 0; i < files.length; i++) {
-        let document_id = null;
-        try {
-          const response = await axios.post(
-            "http://3.37.240.199/api/documents/", {"file_url": files[i]}, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            }}
-          );
-          document_id = response.data.document_id;
-          console.log(response.data);
-          console.log(`${files[i].name} 파일 업로드!`);
-        } catch (error) {
-          console.log(`${files[i].name} 파일이름 양식이 올바르지 않습니다.`);
+  const handleEssayUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!selectedCriteria) {
+      setUploadMessage("논술 평가 기준을 선택해주세요.");
+      setMessageColor("red");
+      setTimeout(() => {
+        setUploadMessage("");
+      }, 6000);
+      return;
+    }
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("criteria", selectedCriteria);
+
+      try {
+        const response = await axios.post(
+          "http://3.37.240.199/api/essays/",
+          formData
+        );
+
+        if (response.status !== 201) {
+          throw new Error("파일 업로드 실패");
         }
-        if (type === "document") {
-          axios.post(`http://3.37.240.199/api/aims/extractions/${document_id}/`)
-        } else if (type == "studentRecord") {
-          axios.post(`http://3.37.240.199/api/aims/summarizations/${document_id}/`)
-        } else if (type == "essay") {
-          axios.post(`http://3.37.240.199/api/aims/evaluations/${document_id}/`)
-        }
-        
+        setUploadMessage("파일이 업로드 되었습니다.");
+        setMessageColor("blue");
+      } catch (error) {
+        console.error("Error:", error);
+        setUploadMessage("파일 업로드 중 오류가 발생했습니다.");
+        setMessageColor("red");
+      } finally {
+        setTimeout(() => {
+          setUploadMessage("");
+        }, 9000);
       }
+    }
+  };
+
+  const handleCriteriaSelect = (criteriaId) => {
+    setSelectedCriteria(criteriaId);
+    setIsDropdownOpen(false);
   };
 
   return (
     <>
       <MainContainerInfoTop>
-        <HelpIcon src={helpicon} alt="help-icon" />
         <AdminInfo>어드민님</AdminInfo>
       </MainContainerInfoTop>
-      <MainInfoContainerText>담당 업무를 선택하세요</MainInfoContainerText>
+      <MainInfoContainerTextSet>
+        <MainInfoContainerText>
+          업로드 할 파일을 선택해주세요
+        </MainInfoContainerText>
+        <MainInfoContainerEssayText>
+          논술 답안지 업로드 시 논술 평가 기준을 먼저 선택해주세요
+        </MainInfoContainerEssayText>
+      </MainInfoContainerTextSet>
+      <MainContainerEssayCriteria>
+        <CriteriaSelectContainer
+          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+        >
+          <span>
+            {selectedCriteria
+              ? criteriaList.find((c) => c.id === selectedCriteria)?.title
+              : "평가 기준을 선택하세요"}
+          </span>
+          <ArrowIcon
+            isopen={isDropdownOpen}
+            src={arrow_down}
+            alt="드롭다운 화살표"
+          />
+          {isDropdownOpen && (
+            <CriteriaSelectList>
+              {criteriaList.map((criteria) => (
+                <CriteriaSelectListItem
+                  key={criteria.id}
+                  isSelected={criteria.id === selectedCriteria}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleCriteriaSelect(criteria.id);
+                  }}
+                >
+                  {criteria.title}
+                </CriteriaSelectListItem>
+              ))}
+            </CriteriaSelectList>
+          )}
+        </CriteriaSelectContainer>
+      </MainContainerEssayCriteria>
       <MainContainerContentChoice>
         <MainContainerContentChoiceItem onClick={handleDocumentReviewClick}>
           <input
@@ -143,9 +364,8 @@ function AdminPageContentElement({}) {
             id="document-upload"
             multiple
             style={{ display: "none" }}
-            onChange={(e) => handleFileChange(e, "document")}
           />
-          <MainPageItemIcon src={icon} alt="icon" />
+          <MainPageItemIcon src={icon2} alt="icon" />
           <MainPageItemText>입학 서류 업로드</MainPageItemText>
         </MainContainerContentChoiceItem>
         <MainContainerContentChoiceItemLine />
@@ -155,9 +375,8 @@ function AdminPageContentElement({}) {
             id="student-record-upload"
             multiple
             style={{ display: "none" }}
-            onChange={(e) => handleFileChange(e, "studentRecord")}
           />
-          <MainPageItemIcon src={icon} alt="icon" />
+          <MainPageItemIcon src={icon1} alt="icon" />
           <MainPageItemText>생활기록부 업로드</MainPageItemText>
         </MainContainerContentChoiceItem>
         <MainContainerContentChoiceItemLine />
@@ -167,12 +386,24 @@ function AdminPageContentElement({}) {
             id="essay-upload"
             multiple
             style={{ display: "none" }}
-            onChange={(e) => handleFileChange(e, "essay")}
+            onChange={handleEssayUpload}
           />
-          <MainPageItemIcon src={icon} alt="icon" />
-          <MainPageItemText>논술 업로드</MainPageItemText>
+          <MainPageItemIcon src={icon3} alt="icon" />
+          <MainPageItemText>논술 답안지 업로드</MainPageItemText>
         </MainContainerContentChoiceItem>
       </MainContainerContentChoice>
+
+      {uploadMessage && (
+        <p
+          style={{
+            color: messageColor,
+            fontSize: "1.8rem",
+            marginTop: "0.5rem",
+          }}
+        >
+          {uploadMessage}
+        </p>
+      )}
     </>
   );
 }
