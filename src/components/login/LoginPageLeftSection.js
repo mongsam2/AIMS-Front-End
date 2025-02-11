@@ -1,8 +1,7 @@
 import React from "react";
 import styled, { createGlobalStyle } from "styled-components";
-import logoicon from "../../assets/aims_logo.png";
+import logoicon from "../../assets/logo_3d1.png";
 
-// 글로벌 스타일로 웹 폰트 정의
 const GlobalStyle = createGlobalStyle`
   @font-face {
     font-family: 'SBAggroB';
@@ -22,8 +21,9 @@ const LoginContainerContentLeft = styled.div`
 `;
 
 const LoginContainerContentLogoIcon = styled.img`
+  margin-left: 40px;
   width: 23%;
-  height: 23%;
+  height: auto;
 `;
 
 const LoginContainerContentLeftTitleSet = styled.div`
@@ -36,11 +36,25 @@ const LoginContainerContentLeftTitleSet = styled.div`
   gap: 1.5rem;
 `;
 
-const LoginContainerContentLeftTitle = styled.div`
+const LoginContainerContentLeftTitleSet1 = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const LoginContainerContentLeftTitle1 = styled.div`
+  font-size: 4.5rem;
+  font-weight: bold;
+  color: #0070ce;
+  font-family: "SBAggroB", sans-serif;
+  width: auto;
+`;
+
+const LoginContainerContentLeftTitle2 = styled.div`
   font-size: 4.5rem;
   font-weight: bold;
   color: rgba(0, 0, 0, 1);
   font-family: "SBAggroB", sans-serif;
+  width: auto;
 `;
 
 const LoginContainerContentLeftUnviName = styled.div`
@@ -60,17 +74,18 @@ const LoginContainerContentLeftUnviTextSet = styled.div`
 `;
 
 const LoginContainerContentLeftUnviEnText = styled.div`
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 500;
   color: rgba(0, 0, 0, 1);
 
   span {
     font-weight: bold;
+    font-size: 2.2rem;
   }
 `;
 
 const LoginContainerContentLeftUnviKoText = styled.div`
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 500;
   color: rgba(0, 0, 0, 1);
 `;
@@ -82,9 +97,16 @@ function LoginPageLeftSection() {
       <LoginContainerContentLeft>
         <LoginContainerContentLogoIcon src={logoicon} alt="logoicon" />
         <LoginContainerContentLeftTitleSet>
-          <LoginContainerContentLeftTitle>AIMS</LoginContainerContentLeftTitle>
+          <LoginContainerContentLeftTitleSet1>
+            <LoginContainerContentLeftTitle1>
+              AI
+            </LoginContainerContentLeftTitle1>
+            <LoginContainerContentLeftTitle2>
+              MS
+            </LoginContainerContentLeftTitle2>
+          </LoginContainerContentLeftTitleSet1>
           <LoginContainerContentLeftUnviName>
-            한국대학교
+            업스대학교
           </LoginContainerContentLeftUnviName>
         </LoginContainerContentLeftTitleSet>
         <LoginContainerContentLeftUnviTextSet>
@@ -93,7 +115,7 @@ function LoginPageLeftSection() {
             anagement <span>S</span>ystem
           </LoginContainerContentLeftUnviEnText>
           <LoginContainerContentLeftUnviKoText>
-            한국대학교 입학 정보 관리 시스템
+            업스대학교 입학 정보 관리 시스템
           </LoginContainerContentLeftUnviKoText>
         </LoginContainerContentLeftUnviTextSet>
       </LoginContainerContentLeft>

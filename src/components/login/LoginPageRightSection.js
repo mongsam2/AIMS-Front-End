@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 const LoginContainerContentRight = styled.div`
   width: 40%;
@@ -34,14 +35,14 @@ const LoginContainerContentLoginSetIdSet = styled.div`
 `;
 
 const LoginContainerContentLoginSetIdText = styled.div`
-  font-size: 1.7rem;
+  font-size: 2rem;
   font-weight: 500;
   color: rgba(255, 255, 255, 1);
 `;
 
 const LoginContainerContentLoginSetIdInput = styled.input`
   padding-left: 1rem;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   width: 90%;
   height: 35%;
   border: none;
@@ -59,14 +60,14 @@ const LoginContainerContentLoginSetPwSet = styled.div`
 `;
 
 const LoginContainerContentLoginSetPwSetPwText = styled.div`
-  font-size: 1.7rem;
+  font-size: 2rem;
   font-weight: 500;
   color: rgba(255, 255, 255, 1);
 `;
 
 const LoginContainerContentLoginSetPwInput = styled.input`
   padding-left: 1rem;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   width: 90%;
   height: 35%;
   border: none;
@@ -115,8 +116,51 @@ const LoginContainerContentLoginFalseText = styled.div`
 `;
 
 function LoginPageRightSection() {
-  const handleLoginClick = () => {
-    window.location.href = "/main";
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginMessage, setLoginMessage] = useState("");
+
+  const getCSRFToken = async () => {
+    const response = await axios.get("http://3.37.240.199/api/users/csrf/", {
+      withCredentials: true,
+    });
+    return response.data.csrfToken; 
+  };
+
+  const handleLoginClick = async () => {
+    try {
+      const csrfToken = await getCSRFToken(); 
+      const response = await axios.post(
+        "http://3.37.240.199/api/users/login/",
+        {
+          username,
+          password,
+        },
+        {
+          headers: {
+            "X-CSRFToken": csrfToken,
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (response && response.data) {
+        setLoginMessage(response.data.message);
+        if (username === "aims") {
+          window.location.href = "/admin";
+        } else {
+          window.location.href = "/main";
+        }
+      } else {
+        setLoginMessage("서버로부터 유효한 응답을 받지 못했습니다.");
+      }
+    } catch (error) {
+      if (error.response && error.response.data) {
+        setLoginMessage("아이디 또는 비밀번호가 틀렸습니다.");
+      } else {
+        setLoginMessage("로그인 요청 중 오류가 발생했습니다.");
+      }
+    }
   };
 
   return (
@@ -128,7 +172,11 @@ function LoginPageRightSection() {
         <LoginContainerContentLoginSetIdText>
           ID
         </LoginContainerContentLoginSetIdText>
-        <LoginContainerContentLoginSetIdInput placeholder="아이디를 입력하시오" />
+        <LoginContainerContentLoginSetIdInput
+          placeholder="아이디를 입력하시오"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
       </LoginContainerContentLoginSetIdSet>
       <LoginContainerContentLoginSetPwSet>
         <LoginContainerContentLoginSetPwSetPwText>
@@ -137,6 +185,8 @@ function LoginPageRightSection() {
         <LoginContainerContentLoginSetPwInput
           type="password"
           placeholder="비밀번호를 입력하시오"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
       </LoginContainerContentLoginSetPwSet>
       <LoginContainerContentLoginSetLoginButtonSet>
@@ -146,7 +196,7 @@ function LoginPageRightSection() {
       </LoginContainerContentLoginSetLoginButtonSet>
       <LoginContainerContentLoginFalseTextSet>
         <LoginContainerContentLoginFalseText>
-          로그인에 실패하였습니다.
+          {loginMessage}
         </LoginContainerContentLoginFalseText>
       </LoginContainerContentLoginFalseTextSet>
     </LoginContainerContentRight>
