@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const VisualizeEssayTest = styled.div`
-  width: 40%;
+  width: 49%;
   height: 100%;
   background-color: #f9fafd;
   color: rgba(0, 0, 0, 0.3);
@@ -19,23 +19,16 @@ const VisualizeEssayTestPDF = styled.iframe`
 `;
 
 function EssayTestPDFViewer({ fileUrl }) {
-  const baseUrl = "http://3.37.240.199"; // 서버의 도메인 이름
   return (
     <VisualizeEssayTest>
       <VisualizeEssayTestPDF
         title="PDF Viewer"
-        src={fileUrl ? `${baseUrl}${fileUrl}` : "about:blank"}
+        src={fileUrl ? `${fileUrl}#toolbar=0&zoom=37.8` : "about:blank"}
         width="100%"
         height="600px"
       >
         {fileUrl ? "이 브라우저는 PDF 파일을 지원하지 않습니다." : "None"}
-        <a
-          href={
-            fileUrl
-              ? `${baseUrl}${fileUrl}`
-              : "https://arxiv.org/pdf/2005.11401"
-          }
-        >
+        <a href={fileUrl ? `${fileUrl}` : "https://arxiv.org/pdf/2005.11401"}>
           여기에서 PDF를 다운로드하세요.
         </a>
       </VisualizeEssayTestPDF>
