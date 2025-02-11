@@ -2,6 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import helpicon from "../../assets/help_icon.png";
 import icon from "../../assets/file.png";
+import aims1 from "../../assets/aims1.png";
+import aims2 from "../../assets/aims2.png";
+import aims3 from "../../assets/aims3.png";
 
 const MainContainerInfoTop = styled.div`
   display: flex;
@@ -75,8 +78,8 @@ const MainContainerContentChoiceItemLine = styled.div`
 `;
 
 const MainPageItemIcon = styled.img`
-  width: 50%;
-  height: 40%;
+  width: 85%;
+  height: 65%;
   margin-bottom: 10%;
 `;
 
@@ -107,17 +110,17 @@ function MainPageContentElement({}) {
       <MainInfoContainerText>담당 업무를 선택하세요</MainInfoContainerText>
       <MainContainerContentChoice>
         <MainContainerContentChoiceItem onClick={handleDocumentReviewClick}>
-          <MainPageItemIcon src={icon} alt="icon" />
+          <MainPageItemIcon src={aims2} alt="icon" />
           <MainPageItemText>입학 서류 검토</MainPageItemText>
         </MainContainerContentChoiceItem>
         <MainContainerContentChoiceItemLine />
         <MainContainerContentChoiceItem onClick={handleStudentRecordClick}>
-          <MainPageItemIcon src={icon} alt="icon" />
+          <MainPageItemIcon src={aims1} alt="icon" />
           <MainPageItemText>생활기록부 및 면접 평가</MainPageItemText>
         </MainContainerContentChoiceItem>
         <MainContainerContentChoiceItemLine />
         <MainContainerContentChoiceItem onClick={handleEssayTestClick}>
-          <MainPageItemIcon src={icon} alt="icon" />
+          <MainPageItemIcon src={aims3} alt="icon" />
           <MainPageItemText>논술</MainPageItemText>
         </MainContainerContentChoiceItem>
       </MainContainerContentChoice>
