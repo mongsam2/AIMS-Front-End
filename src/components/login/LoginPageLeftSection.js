@@ -18,22 +18,24 @@ const LoginContainerContentLeft = styled.div`
   align-items: center;
   width: 60%;
   height: 100%;
+  min-height: 460px;
+  overflow-x: hidden;
+  box-sizing: border-box;
 `;
 
 const LoginContainerContentLogoIcon = styled.img`
-  margin-left: 40px;
-  width: 23%;
+  width: clamp(100px, 15vw, 200px);
   height: auto;
+  margin-left: 2vw;
 `;
 
 const LoginContainerContentLeftTitleSet = styled.div`
   width: 50%;
-  height: 20%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  gap: 1.5rem;
+  gap: clamp(1rem, 2vw, 2rem);
+  margin-top: 2vh;
 `;
 
 const LoginContainerContentLeftTitleSet1 = styled.div`
@@ -42,52 +44,55 @@ const LoginContainerContentLeftTitleSet1 = styled.div`
 `;
 
 const LoginContainerContentLeftTitle1 = styled.div`
-  font-size: 4.5rem;
+  font-size: clamp(2.5rem, 4vw, 4.5rem);
   font-weight: bold;
   color: #0070ce;
   font-family: "SBAggroB", sans-serif;
-  width: auto;
 `;
 
 const LoginContainerContentLeftTitle2 = styled.div`
-  font-size: 4.5rem;
+  font-size: clamp(2.5rem, 4vw, 4.5rem);
   font-weight: bold;
-  color: rgba(0, 0, 0, 1);
+  color: black;
   font-family: "SBAggroB", sans-serif;
-  width: auto;
 `;
 
 const LoginContainerContentLeftUnviName = styled.div`
-  font-size: 2rem;
+  font-size: clamp(1.2rem, 2vw, 2rem);
   font-weight: bold;
-  color: rgba(0, 0, 0, 1);
+  color: black;
 `;
 
 const LoginContainerContentLeftUnviTextSet = styled.div`
   width: 50%;
-  height: 10%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  gap: 1.5rem;
+  gap: clamp(1rem, 1.5vh, 2rem);
+  margin-top: 2vh;
 `;
 
 const LoginContainerContentLeftUnviEnText = styled.div`
-  font-size: 2rem;
+  display: flex;
+  flex-direction: column;
+  font-size: clamp(1rem, 1.8vw, 2rem);
   font-weight: 500;
-  color: rgba(0, 0, 0, 1);
-
-  span {
-    font-weight: bold;
-    font-size: 2.2rem;
-  }
+  color: black;
 `;
 
 const LoginContainerContentLeftUnviKoText = styled.div`
-  font-size: 1.75rem;
+  font-size: clamp(1rem, 1.5vw, 1.75rem);
   font-weight: 500;
-  color: rgba(0, 0, 0, 1);
+  color: black;
+`;
+
+const AimsTextSpanContainer = styled.div`
+  display: flex;
+  align-items: center;
+  span {
+    font-weight: bold;
+    font-size: clamp(1.2rem, 2vw, 2.2rem);
+  }
 `;
 
 function LoginPageLeftSection() {
@@ -98,12 +103,8 @@ function LoginPageLeftSection() {
         <LoginContainerContentLogoIcon src={logoicon} alt="logoicon" />
         <LoginContainerContentLeftTitleSet>
           <LoginContainerContentLeftTitleSet1>
-            <LoginContainerContentLeftTitle1>
-              AI
-            </LoginContainerContentLeftTitle1>
-            <LoginContainerContentLeftTitle2>
-              MS
-            </LoginContainerContentLeftTitle2>
+            <LoginContainerContentLeftTitle1>AI</LoginContainerContentLeftTitle1>
+            <LoginContainerContentLeftTitle2>MS</LoginContainerContentLeftTitle2>
           </LoginContainerContentLeftTitleSet1>
           <LoginContainerContentLeftUnviName>
             업스대학교
@@ -111,8 +112,8 @@ function LoginPageLeftSection() {
         </LoginContainerContentLeftTitleSet>
         <LoginContainerContentLeftUnviTextSet>
           <LoginContainerContentLeftUnviEnText>
-            <span>A</span>dmission <span>I</span>nformation <span>M</span>
-            anagement <span>S</span>ystem
+            <AimsTextSpanContainer><span>A</span>dmission <span>I</span>nformation</AimsTextSpanContainer>
+            <AimsTextSpanContainer><span>M</span>anagement <span>S</span>ystem</AimsTextSpanContainer>
           </LoginContainerContentLeftUnviEnText>
           <LoginContainerContentLeftUnviKoText>
             업스대학교 입학 정보 관리 시스템
