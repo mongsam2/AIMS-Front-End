@@ -64,12 +64,14 @@ export const LoginPageContainer = styled.div`
   justify-content: left;
   align-items: center;
   height: 100vh;
+  min-width: 730px;
   background: linear-gradient(to bottom, #3c50aa, #182044);
 `;
 
 export const LoginPageContent = styled.div`
   width: 90%;
   height: 80%;
+  min-height: 400px;
   border-radius: 2rem;
   background: white;
   display: flex;

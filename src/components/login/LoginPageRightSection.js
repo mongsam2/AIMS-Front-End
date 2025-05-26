@@ -3,96 +3,94 @@ import styled from "styled-components";
 import axios from "axios";
 
 const LoginContainerContentRight = styled.div`
-  width: 40%;
+  width: 100%;
+  max-width: 700px;
+  min-width: 400px;
+  min-height: 400px;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background: linear-gradient(to bottom, #182044, #3c50aa);
-  border-radius: 0 2rem 2rem 0;
+  border-radius: 0 32px 32px 0;
+  padding: 40px 20px;
+  box-sizing: border-box;
+  overflow-x: hidden;
 `;
 
 const LoginContainerContentRightTitle = styled.div`
-  width: 80%;
-  height: 10%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: left;
-  font-size: 2.8rem;
+  width: 100%;
+  margin-bottom: 30px;
+  font-size: clamp(24px, 2.5vw, 36px); /* 반응형 폰트 */
   font-weight: bold;
-  color: rgba(255, 255, 255, 1);
+  color: #ffffff;
+  text-align: left;
 `;
 
 const LoginContainerContentLoginSetIdSet = styled.div`
-  width: 80%;
-  height: 15%;
+  width: 100%;
+  max-width: 480px;
+  margin-bottom: 24px;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  align-items: left;
+  gap: 8px;
 `;
 
 const LoginContainerContentLoginSetIdText = styled.div`
-  font-size: 2rem;
+  font-size: 20px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 1);
+  color: #ffffff;
 `;
 
 const LoginContainerContentLoginSetIdInput = styled.input`
-  padding-left: 1rem;
-  font-size: 1.6rem;
-  width: 90%;
-  height: 35%;
+  padding: 12px;
+  font-size: 16px;
+  width: 100%;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 8px;
   background-color: #d3e3fe;
 `;
 
 const LoginContainerContentLoginSetPwSet = styled.div`
-  width: 80%;
-  height: 15%;
+  width: 100%;
+  max-width: 480px;
+  margin-bottom: 24px;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  align-items: left;
+  gap: 8px;
 `;
 
 const LoginContainerContentLoginSetPwSetPwText = styled.div`
-  font-size: 2rem;
+  font-size: 20px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 1);
+  color: #ffffff;
 `;
 
 const LoginContainerContentLoginSetPwInput = styled.input`
-  padding-left: 1rem;
-  font-size: 1.6rem;
-  width: 90%;
-  height: 35%;
+  padding: 12px;
+  font-size: 16px;
+  width: 100%;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 8px;
   background-color: #d3e3fe;
 `;
 
 const LoginContainerContentLoginSetLoginButtonSet = styled.div`
-  width: 80%;
-  height: 10%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: left;
+  width: 100%;
+  max-width: 480px;
+  margin-bottom: 20px;
 `;
 
 const LoginContainerContentLoginSetLoginButton = styled.button`
-  width: 90%;
-  height: 70%;
-  font-size: 1.7rem;
+  width: 100%;
+  padding: 14px;
+  font-size: 18px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 1);
+  color: #ffffff;
   background-color: #3c50aa;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 8px;
   cursor: pointer;
   transition: transform 0.1s ease;
 
@@ -102,18 +100,16 @@ const LoginContainerContentLoginSetLoginButton = styled.button`
 `;
 
 const LoginContainerContentLoginFalseTextSet = styled.div`
-  width: 80%;
-  height: 10%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  width: 100%;
+  max-width: 480px;
+  text-align: center;
 `;
 
 const LoginContainerContentLoginFalseText = styled.div`
-  font-size: 1.5rem;
+  font-size: 16px;
   color: rgb(249, 118, 118);
 `;
+
 
 function LoginPageRightSection() {
   const [username, setUsername] = useState("");
@@ -124,7 +120,7 @@ function LoginPageRightSection() {
     const response = await axios.get("http://3.37.240.199/api/users/csrf/", {
       withCredentials: true,
     });
-    return response.data.csrfToken; 
+    return response.data.csrfToken;
   };
 
   const handleLoginClick = async () => {
@@ -134,22 +130,20 @@ function LoginPageRightSection() {
   return (
     <LoginContainerContentRight>
       <LoginContainerContentRightTitle>
-        <div className="login-container-content-right-title-text">로그인</div>
+        로그인
       </LoginContainerContentRightTitle>
+
       <LoginContainerContentLoginSetIdSet>
-        <LoginContainerContentLoginSetIdText>
-          ID
-        </LoginContainerContentLoginSetIdText>
+        <LoginContainerContentLoginSetIdText>ID</LoginContainerContentLoginSetIdText>
         <LoginContainerContentLoginSetIdInput
           placeholder="아이디를 입력하시오"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
       </LoginContainerContentLoginSetIdSet>
+
       <LoginContainerContentLoginSetPwSet>
-        <LoginContainerContentLoginSetPwSetPwText>
-          Password
-        </LoginContainerContentLoginSetPwSetPwText>
+        <LoginContainerContentLoginSetPwSetPwText>Password</LoginContainerContentLoginSetPwSetPwText>
         <LoginContainerContentLoginSetPwInput
           type="password"
           placeholder="비밀번호를 입력하시오"
@@ -157,11 +151,13 @@ function LoginPageRightSection() {
           onChange={(e) => setPassword(e.target.value)}
         />
       </LoginContainerContentLoginSetPwSet>
+
       <LoginContainerContentLoginSetLoginButtonSet>
         <LoginContainerContentLoginSetLoginButton onClick={handleLoginClick}>
           로그인
         </LoginContainerContentLoginSetLoginButton>
       </LoginContainerContentLoginSetLoginButtonSet>
+
       <LoginContainerContentLoginFalseTextSet>
         <LoginContainerContentLoginFalseText>
           {loginMessage}
