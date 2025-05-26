@@ -3,11 +3,11 @@ import styled from "styled-components";
 import axios from "axios";
 
 const LoginContainerContentRight = styled.div`
-  width: 100%;
+  width: 40%;
   max-width: 700px;
   min-width: 400px;
-  min-height: 400px;
   height: 100%;
+  min-height: 460px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -22,13 +22,13 @@ const LoginContainerContentRight = styled.div`
 const LoginContainerContentRightTitle = styled.div`
   width: 100%;
   margin-bottom: 30px;
-  font-size: clamp(24px, 2.5vw, 36px); /* 반응형 폰트 */
+  font-size: clamp(24px, 2.5vw, 36px);
   font-weight: bold;
   color: #ffffff;
   text-align: left;
 `;
 
-const LoginContainerContentLoginSetIdSet = styled.div`
+const FieldSet = styled.div`
   width: 100%;
   max-width: 480px;
   margin-bottom: 24px;
@@ -37,13 +37,13 @@ const LoginContainerContentLoginSetIdSet = styled.div`
   gap: 8px;
 `;
 
-const LoginContainerContentLoginSetIdText = styled.div`
+const Label = styled.div`
   font-size: 20px;
   font-weight: 500;
   color: #ffffff;
 `;
 
-const LoginContainerContentLoginSetIdInput = styled.input`
+const Input = styled.input`
   padding: 12px;
   font-size: 16px;
   width: 100%;
@@ -52,37 +52,13 @@ const LoginContainerContentLoginSetIdInput = styled.input`
   background-color: #d3e3fe;
 `;
 
-const LoginContainerContentLoginSetPwSet = styled.div`
-  width: 100%;
-  max-width: 480px;
-  margin-bottom: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;
-
-const LoginContainerContentLoginSetPwSetPwText = styled.div`
-  font-size: 20px;
-  font-weight: 500;
-  color: #ffffff;
-`;
-
-const LoginContainerContentLoginSetPwInput = styled.input`
-  padding: 12px;
-  font-size: 16px;
-  width: 100%;
-  border: none;
-  border-radius: 8px;
-  background-color: #d3e3fe;
-`;
-
-const LoginContainerContentLoginSetLoginButtonSet = styled.div`
+const ButtonSet = styled.div`
   width: 100%;
   max-width: 480px;
   margin-bottom: 20px;
 `;
 
-const LoginContainerContentLoginSetLoginButton = styled.button`
+const Button = styled.button`
   width: 100%;
   padding: 14px;
   font-size: 18px;
@@ -99,17 +75,16 @@ const LoginContainerContentLoginSetLoginButton = styled.button`
   }
 `;
 
-const LoginContainerContentLoginFalseTextSet = styled.div`
+const MessageSet = styled.div`
   width: 100%;
   max-width: 480px;
   text-align: center;
 `;
 
-const LoginContainerContentLoginFalseText = styled.div`
+const Message = styled.div`
   font-size: 16px;
   color: rgb(249, 118, 118);
 `;
-
 
 function LoginPageRightSection() {
   const [username, setUsername] = useState("");
@@ -127,42 +102,44 @@ function LoginPageRightSection() {
     window.location.href = "/main";
   };
 
+  const handleAdminClick = async () => {
+    window.location.href = "/admin";
+  };
+
   return (
     <LoginContainerContentRight>
-      <LoginContainerContentRightTitle>
-        로그인
-      </LoginContainerContentRightTitle>
+      <LoginContainerContentRightTitle>로그인</LoginContainerContentRightTitle>
 
-      <LoginContainerContentLoginSetIdSet>
-        <LoginContainerContentLoginSetIdText>ID</LoginContainerContentLoginSetIdText>
-        <LoginContainerContentLoginSetIdInput
+      <FieldSet>
+        <Label>ID</Label>
+        <Input
           placeholder="아이디를 입력하시오"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
-      </LoginContainerContentLoginSetIdSet>
+      </FieldSet>
 
-      <LoginContainerContentLoginSetPwSet>
-        <LoginContainerContentLoginSetPwSetPwText>Password</LoginContainerContentLoginSetPwSetPwText>
-        <LoginContainerContentLoginSetPwInput
+      <FieldSet>
+        <Label>Password</Label>
+        <Input
           type="password"
           placeholder="비밀번호를 입력하시오"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-      </LoginContainerContentLoginSetPwSet>
+      </FieldSet>
 
-      <LoginContainerContentLoginSetLoginButtonSet>
-        <LoginContainerContentLoginSetLoginButton onClick={handleLoginClick}>
-          로그인
-        </LoginContainerContentLoginSetLoginButton>
-      </LoginContainerContentLoginSetLoginButtonSet>
+      <ButtonSet>
+        <Button onClick={handleLoginClick}>로그인</Button>
+      </ButtonSet>
 
-      <LoginContainerContentLoginFalseTextSet>
-        <LoginContainerContentLoginFalseText>
-          {loginMessage}
-        </LoginContainerContentLoginFalseText>
-      </LoginContainerContentLoginFalseTextSet>
+      <ButtonSet>
+        <Button onClick={handleAdminClick}>관리자 로그인</Button>
+      </ButtonSet>
+
+      <MessageSet>
+        <Message>{loginMessage}</Message>
+      </MessageSet>
     </LoginContainerContentRight>
   );
 }

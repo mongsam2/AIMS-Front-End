@@ -61,7 +61,6 @@ export const MainPageContent = styled.div`
 export const LoginPageContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: left;
   align-items: center;
   height: 100vh;
   min-width: 730px;
@@ -71,7 +70,8 @@ export const LoginPageContainer = styled.div`
 export const LoginPageContent = styled.div`
   width: 90%;
   height: 80%;
-  min-height: 400px;
+  min-height: 460px;
+  max-width: 1300px;
   border-radius: 2rem;
   background: white;
   display: flex;
@@ -79,4 +79,5 @@ export const LoginPageContent = styled.div`
   align-items: center;
   justify-content: space-around;
   box-shadow: 0 0 1000px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
 `;

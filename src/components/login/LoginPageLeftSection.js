@@ -18,20 +18,21 @@ const LoginContainerContentLeft = styled.div`
   align-items: center;
   width: 60%;
   height: 100%;
+  min-height: 460px;
+  overflow-x: hidden;
+  box-sizing: border-box;
 `;
 
 const LoginContainerContentLogoIcon = styled.img`
-  margin-left: 2vw;
   width: clamp(100px, 15vw, 200px);
   height: auto;
+  margin-left: 2vw;
 `;
 
 const LoginContainerContentLeftTitleSet = styled.div`
   width: 50%;
-  height: auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   gap: clamp(1rem, 2vw, 2rem);
   margin-top: 2vh;
@@ -52,22 +53,20 @@ const LoginContainerContentLeftTitle1 = styled.div`
 const LoginContainerContentLeftTitle2 = styled.div`
   font-size: clamp(2.5rem, 4vw, 4.5rem);
   font-weight: bold;
-  color: rgba(0, 0, 0, 1);
+  color: black;
   font-family: "SBAggroB", sans-serif;
 `;
 
 const LoginContainerContentLeftUnviName = styled.div`
   font-size: clamp(1.2rem, 2vw, 2rem);
   font-weight: bold;
-  color: rgba(0, 0, 0, 1);
+  color: black;
 `;
 
 const LoginContainerContentLeftUnviTextSet = styled.div`
   width: 50%;
-  height: auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   gap: clamp(1rem, 1.5vh, 2rem);
   margin-top: 2vh;
@@ -75,17 +74,16 @@ const LoginContainerContentLeftUnviTextSet = styled.div`
 
 const LoginContainerContentLeftUnviEnText = styled.div`
   display: flex;
-  align-items: center;
   flex-direction: column;
   font-size: clamp(1rem, 1.8vw, 2rem);
   font-weight: 500;
-  color: rgba(0, 0, 0, 1);
+  color: black;
 `;
 
 const LoginContainerContentLeftUnviKoText = styled.div`
   font-size: clamp(1rem, 1.5vw, 1.75rem);
   font-weight: 500;
-  color: rgba(0, 0, 0, 1);
+  color: black;
 `;
 
 const AimsTextSpanContainer = styled.div`
@@ -105,12 +103,8 @@ function LoginPageLeftSection() {
         <LoginContainerContentLogoIcon src={logoicon} alt="logoicon" />
         <LoginContainerContentLeftTitleSet>
           <LoginContainerContentLeftTitleSet1>
-            <LoginContainerContentLeftTitle1>
-              AI
-            </LoginContainerContentLeftTitle1>
-            <LoginContainerContentLeftTitle2>
-              MS
-            </LoginContainerContentLeftTitle2>
+            <LoginContainerContentLeftTitle1>AI</LoginContainerContentLeftTitle1>
+            <LoginContainerContentLeftTitle2>MS</LoginContainerContentLeftTitle2>
           </LoginContainerContentLeftTitleSet1>
           <LoginContainerContentLeftUnviName>
             업스대학교
