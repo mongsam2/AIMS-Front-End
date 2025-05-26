@@ -128,39 +128,7 @@ function LoginPageRightSection() {
   };
 
   const handleLoginClick = async () => {
-    try {
-      const csrfToken = await getCSRFToken(); 
-      const response = await axios.post(
-        "http://3.37.240.199/api/users/login/",
-        {
-          username,
-          password,
-        },
-        {
-          headers: {
-            "X-CSRFToken": csrfToken,
-          },
-          withCredentials: true,
-        }
-      );
-
-      if (response && response.data) {
-        setLoginMessage(response.data.message);
-        if (username === "aims") {
-          window.location.href = "/admin";
-        } else {
-          window.location.href = "/main";
-        }
-      } else {
-        setLoginMessage("서버로부터 유효한 응답을 받지 못했습니다.");
-      }
-    } catch (error) {
-      if (error.response && error.response.data) {
-        setLoginMessage("아이디 또는 비밀번호가 틀렸습니다.");
-      } else {
-        setLoginMessage("로그인 요청 중 오류가 발생했습니다.");
-      }
-    }
+    window.location.href = "/main";
   };
 
   return (
