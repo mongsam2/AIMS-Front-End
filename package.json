@@ -12,7 +12,8 @@
     "react-modal": "^3.16.3",
     "react-router-dom": "^6.22.0",
     "react-scripts": "^5.0.1",
-    "styled-components": "^6.1.14"
+    "styled-components": "^6.1.14",
+    "yarn": "^1.22.22"
   },
   "scripts": {
     "start": "react-scripts start",

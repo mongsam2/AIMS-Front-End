@@ -8,38 +8,36 @@ import icon3 from "../../assets/aims3.png";
 
 const MainContainerInfoTop = styled.div`
   display: flex;
-  justify-content: right;
+  justify-content: space-between;
   align-items: center;
-  width: 97%;
-  height: 6%;
+  width: 100%;
+  height: 30px;
+  margin-bottom: 10px;
 `;
 
 const AdminInfo = styled.p`
   color: rgba(0, 0, 0, 0.7);
-  margin: 0;
-  font-size: 1.6rem;
+  margin: 0 4px;
+  font-size: 16px;
 `;
 
 const MainInfoContainerText = styled.div`
-  color: rgba(0, 0, 0, 1);
-  margin: 0;
-  font-size: 2.5rem;
+  color: #000;
+  font-size: 28px;
   font-weight: bold;
-  width: 97%;
-  height: 20%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 100%;
+  text-align: center;
+  margin: 20px 0;
 `;
 
 const MainContainerContentChoice = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
-  width: 97%;
-  height: 60%;
-  gap: 6%;
+  align-items: flex-start;
+  width: 100%;
+  gap: 40px;
+  flex-wrap: wrap;
 `;
 
 const MainContainerContentChoiceItem = styled.div`
@@ -47,12 +45,12 @@ const MainContainerContentChoiceItem = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: none;
-  width: 20%;
-  height: 90%;
-  gap: 1rem;
-  border-radius: 2rem;
+  width: 220px;
+  height: 200px;
+  gap: 12px;
+  border-radius: 24px;
   cursor: pointer;
+  transition: background-color 0.2s;
 
   &:hover {
     background-color: #a9d1f8;
@@ -66,24 +64,23 @@ const MainContainerContentChoiceItem = styled.div`
 `;
 
 const MainContainerContentChoiceItemLine = styled.div`
-  width: 1px;
-  height: 40%;
-  background-color: #3c50aa;
+  display: none; /* 세로 정렬선 제거 */
 `;
 
 const MainPageItemIcon = styled.img`
-  width: 75%;
-  height: 55%;
-  margin-bottom: 10%;
+  width: 80px;
+  height: 80px;
 `;
 
 const MainPageItemText = styled.p`
   color: rgba(0, 0, 0, 0.8);
   font-weight: bold;
-  font-size: 2.5rem;
+  font-size: 18px;
+  text-align: center;
+  margin: 0;
 `;
 
-function MainPageContentElement({}) {
+function MainPageContentElement() {
   const [username, setUsername] = useState("");
 
   useEffect(() => {
@@ -104,11 +101,12 @@ function MainPageContentElement({}) {
   const handleEssayTestClick = () => {
     window.location.href = "/essay-test";
   };
+
   return (
     <>
       <MainContainerInfoTop>
-        <AdminInfo style={{ marginRight: "0.3rem" }}>{username}</AdminInfo>
-        <AdminInfo>님</AdminInfo>
+        <AdminInfo>{username}</AdminInfo>
+        <AdminInfo></AdminInfo>
       </MainContainerInfoTop>
       <MainInfoContainerText>담당 업무를 선택하세요</MainInfoContainerText>
       <MainContainerContentChoice>
@@ -116,12 +114,10 @@ function MainPageContentElement({}) {
           <MainPageItemIcon src={icon2} alt="icon" />
           <MainPageItemText>입학 서류 검토</MainPageItemText>
         </MainContainerContentChoiceItem>
-        <MainContainerContentChoiceItemLine />
         <MainContainerContentChoiceItem onClick={handleStudentRecordClick}>
           <MainPageItemIcon src={icon1} alt="icon" />
           <MainPageItemText>생활기록부 및 면접 평가</MainPageItemText>
         </MainContainerContentChoiceItem>
-        <MainContainerContentChoiceItemLine />
         <MainContainerContentChoiceItem onClick={handleEssayTestClick}>
           <MainPageItemIcon src={icon3} alt="icon" />
           <MainPageItemText>논술</MainPageItemText>

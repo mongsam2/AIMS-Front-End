@@ -11,30 +11,31 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const MainContainerTop = styled.div`
-  width: 96%;
-  height: 10%;
+  width: 100%;
+  max-width: 1240px;
+  height: 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1%;
+  margin-bottom: 20px;
 `;
 
 const Logo = styled.p`
-  font-size: 2rem;
+  font-size: 28px;
   color: white;
   font-family: "SBAggroB", sans-serif;
+  margin: 0;
 `;
 
 const LogoutButton = styled.button`
-  font-size: 1.3rem;
+  font-size: 16px;
   color: rgb(224, 224, 224);
   font-weight: 600;
   cursor: pointer;
   border: none;
   background-color: transparent;
-
   &:hover {
-    color: rgba(114, 152, 255, 0.3);
+    color: rgba(114, 152, 255, 0.7);
   }
 `;
 
