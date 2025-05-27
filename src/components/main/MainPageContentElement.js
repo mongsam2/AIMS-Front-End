@@ -70,7 +70,7 @@ const MainPageItemIcon = styled.img`
 const MainPageItemText = styled.p`
   color: rgba(0, 0, 0, 0.8);
   font-weight: bold;
-  font-size: clamp(16px, 1.6vw, 24px);
+  font-size: clamp(16px, 1.6vw, 22px);
   text-align: center;
   margin: 0;
 `;
