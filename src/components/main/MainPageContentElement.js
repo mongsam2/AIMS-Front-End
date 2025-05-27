@@ -23,11 +23,10 @@ const AdminInfo = styled.p`
 
 const MainInfoContainerText = styled.div`
   color: #000;
-  font-size: 28px;
+  font-size: clamp(20px, 2vw, 32px);
   font-weight: bold;
   width: 100%;
   text-align: center;
-  margin: 20px 0;
 `;
 
 const MainContainerContentChoice = styled.div`
@@ -63,21 +62,26 @@ const MainContainerContentChoiceItem = styled.div`
   }
 `;
 
-const MainContainerContentChoiceItemLine = styled.div`
-  display: none; /* 세로 정렬선 제거 */
-`;
-
 const MainPageItemIcon = styled.img`
-  width: 80px;
-  height: 80px;
+  width: clamp(100px, 10vw, 140px);
+  height: clamp(100px, 10vw, 140px);
 `;
 
 const MainPageItemText = styled.p`
   color: rgba(0, 0, 0, 0.8);
   font-weight: bold;
-  font-size: 18px;
+  font-size: clamp(16px, 1.6vw, 24px);
   text-align: center;
   margin: 0;
+`;
+
+const MainContentGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 70%;
+  width: 100%;
 `;
 
 function MainPageContentElement() {
@@ -108,7 +112,8 @@ function MainPageContentElement() {
         <AdminInfo>{username}</AdminInfo>
         <AdminInfo></AdminInfo>
       </MainContainerInfoTop>
-      <MainInfoContainerText>담당 업무를 선택하세요</MainInfoContainerText>
+      <MainContentGroup>
+        <MainInfoContainerText>담당 업무를 선택하세요</MainInfoContainerText>
       <MainContainerContentChoice>
         <MainContainerContentChoiceItem onClick={handleDocumentReviewClick}>
           <MainPageItemIcon src={icon2} alt="icon" />
@@ -123,6 +128,7 @@ function MainPageContentElement() {
           <MainPageItemText>논술</MainPageItemText>
         </MainContainerContentChoiceItem>
       </MainContainerContentChoice>
+      </MainContentGroup>
     </>
   );
 }
