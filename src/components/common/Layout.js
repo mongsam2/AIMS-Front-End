@@ -41,22 +41,31 @@ export const StudentRecordContent = styled.div`
 export const MainPageContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: left;
   align-items: center;
   height: 100vh;
+  padding: 20px;
   background: linear-gradient(to bottom, #3c50aa, #182044);
+  box-sizing: border-box;
 `;
 
 export const MainPageContent = styled.div`
-  width: 90%;
+  width: 100%;
+  max-width: 1280px;
+  min-height: 430px;
+  min-width: 800px;
   height: 80%;
-  border-radius: 2rem;
+  border-radius: 32px;
   background-color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   box-shadow: 0 0 1000px rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  box-sizing: border-box;
+  overflow: hidden;
 `;
+
 
 export const LoginPageContainer = styled.div`
   display: flex;
