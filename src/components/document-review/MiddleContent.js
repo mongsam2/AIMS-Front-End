@@ -19,6 +19,7 @@ const shrinkExpand = keyframes`
 `;
 
 const MiddleBar = styled.div`
+  overflow: visible;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -38,11 +39,37 @@ const DropdownContainer = styled.div`
 
 const SearchContainer = styled.div`
   display: flex;
-  justify-content: right;
+  justify-content: flex-end;
   align-items: center;
-  width: 35%;
-  height: 100%;
+  width: 100%;
+  max-width: 600px;
   margin-right: 2rem;
+
+  @media (max-width: 1200px) {
+    justify-content: center;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 1rem;
+  }
+`;
+
+const SearchGroup = styled.div`
+  display: flex;
+  border: 1.5px solid rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  height: 40px;
+  position: relative;
+  z-index: 1;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    height: auto;
+  }
 `;
 
 const LeftSection = styled.div`
@@ -55,39 +82,45 @@ const LeftSection = styled.div`
 
 const CustomDropdown = styled.div`
   position: relative;
-  width: 20%;
-  height: 55%;
-  font-size: 1.5rem;
-  font-weight: 600;
-  border: 1.5px solid rgba(0, 0, 0, 0.2);
-  border-radius: 10px 0px 0px 10px;
-  background-color: white;
-  color: rgba(0, 0, 0, 0.7);
-  cursor: pointer;
+  z-index: 10;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  min-width: 90px;
+  max-width: 120px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  background-color: white;
+  color: rgba(0, 0, 0, 0.7);
   padding: 0 10px;
-  &:hover {
-    background-color: #c5c8fd40;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-right: 1.5px solid rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+
+  @media (max-width: 768px) {
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 10px 10px 0 0;
   }
 `;
 
 const DropdownList = styled.ul`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
   position: absolute;
-  top: 100%;
+  top: calc(100% + 4px);
   left: 0;
   width: 100%;
-  font-weight: 400;
+  max-height: 300px;
+  overflow-y: auto;
   background-color: white;
   border: 1px solid rgba(0, 0, 0, 0.2);
   list-style: none;
   margin: 0;
-  z-index: 1000;
-  height: 200%;
+  padding: 0;
+  z-index: 9999;
+  display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
+  flex-direction: column;
 `;
 
 const DropdownListItem = styled.li`
@@ -110,48 +143,48 @@ const DropdownListItem = styled.li`
 `;
 
 const SearchInput = styled.input`
-  font-size: 1.4rem;
-  font-weight: 600;
-  height: 55%;
-  width: 40%;
-  background-color: white;
-  border-top: 1.5px solid rgba(0, 0, 0, 0.2);
-  border-right: 0px;
-  border-bottom: 1.5px solid rgba(0, 0, 0, 0.2);
-  border-left: 0px;
-  padding: 0px 0px 0px 15px;
+  flex-grow: 1;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border: none;
+  padding-left: 10px;
+  outline: none;
   color: rgba(0, 0, 0, 0.7);
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 10px;
+  }
 `;
 
 const SearchButton = styled.button`
-  padding: 10px;
-  height: 58%;
-  width: 10%;
+  width: 40px;
+  min-width: 40px;
   background-color: white;
-  border-top: 1.5px solid rgba(0, 0, 0, 0.2);
-  border-right: 1.5px solid rgba(0, 0, 0, 0.2);
-  border-bottom: 1.5px solid rgba(0, 0, 0, 0.2);
-  border-left: 0px;
-  border-radius: 0px 10px 10px 0px;
-  color: rgba(0, 0, 0, 0.5);
+  border: none;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   &:hover {
-    background-color: #c5c8fd40;
+    background-color: #f0f0ff;
   }
-  &:active {
-    animation: ${shrinkExpand} 0.3s ease;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 0 0 10px 10px;
   }
 `;
 
 const SearchIcon = styled.img`
-  width: 45%;
+  width: 18px;
   height: auto;
-  &:hover {
-    cursor: pointer;
-  }
 `;
 
 const SearchTag = styled.div`
+  white-space: nowrap;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -180,24 +213,32 @@ const ClearButton = styled.button`
 `;
 
 const CustomDropdownContainer = styled.div`
+  flex-shrink: 0;
   position: relative;
-  width: 92%;
-  height: 55%;
-  font-size: 1.5em;
-  border: 2px solid rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
+  width: 220px;
+  height: 40px;
+  font-size: 1.2rem;
+  border: 1.5px solid rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
   background-color: white;
   color: rgba(0, 0, 0, 0.7);
   font-weight: 600;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 10px;
-  &:hover {
-    background-color: #c5c8fd40;
+  cursor: pointer;
+  z-index: 999;
+
+  @media (max-width: 1200px) {
+    width: 160px;
+    font-size: 1rem;
   }
-  z-index: 1000;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    font-size: 1rem;
+  }
 `;
 
 const AdmissionTypeText = styled.div`
@@ -232,15 +273,21 @@ const CustomDropdownList = styled.ul`
 `;
 
 const CustomDropdownListItem = styled.li`
-  font-size: 1.4rem;
-  padding: 1rem;
+  font-size: 1.2rem; /* 🔽 기존 1.4rem → 줄임 */
+  padding: 0.7rem 1rem; /* 🔽 기존 padding: 1rem */
   font-weight: 500;
   background-color: ${({ isSelected }) => (isSelected ? "#c5c8fd40" : "white")};
   color: ${({ isSelected }) =>
     isSelected ? "rgba(7, 0, 111, 0.9)" : "rgba(0, 0, 0, 0.7)"};
+
   &:hover {
     background-color: #c5c8fd40;
     color: rgba(7, 0, 111, 0.9);
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+    padding: 0.6rem 0.8rem;
   }
 `;
 
@@ -359,7 +406,7 @@ function MiddleContent({ onSearchTermChange, onAdmissionTypeChange }) {
         displayType = "학생부종합(서류형)";
         break;
       case "국방":
-        displayType = "학생부종합(국방시스템특별전형)";
+        displayType = "국방시스템특별전형";
         break;
       default:
         displayType = type;
@@ -404,7 +451,7 @@ function MiddleContent({ onSearchTermChange, onAdmissionTypeChange }) {
                   isSelected={admissionType === "국방"}
                   onClick={() => handleCustomDropdownSelect("국방")}
                 >
-                  학생부종합(국방시스템특별전형)
+                  국방시스템특별전형
                 </CustomDropdownListItem>
                 <CustomDropdownListItem
                   isSelected={admissionType === "논술"}
@@ -424,18 +471,18 @@ function MiddleContent({ onSearchTermChange, onAdmissionTypeChange }) {
         </LeftSection>
         <SearchContainer>
           {showReclassifyButton && (
-            <ReclassifyButton onClick={handleReclassifyClick}>
-              <img
-                style={{
-                  width: "1.8rem",
-                  height: "auto",
-                  marginRight: "1rem",
-                }}
-                src={alert}
-                alt="alert"
-              />
-              분류 실패 서류
-            </ReclassifyButton>
+          <ReclassifyButton onClick={handleReclassifyClick}>
+            <img
+              style={{
+                width: "1.8rem",
+                height: "auto",
+                marginRight: "1rem",
+              }}
+              src={alert}
+              alt="alert"
+            />
+            분류 실패 서류
+          </ReclassifyButton>
           )}
           <CustomDropdown onClick={toggleDropdown}>
             <SelectedOptionText>{selectedOption}</SelectedOptionText>
@@ -444,28 +491,31 @@ function MiddleContent({ onSearchTermChange, onAdmissionTypeChange }) {
               alt="arrow_down"
               isOpen={isDropdownOpen}
             />
-            {isDropdownOpen && (
-              <DropdownList>
-                <DropdownListItem
-                  isSelected={selectedOption === "이름"}
-                  onClick={() => handleOptionSelect("이름")}
-                >
-                  이름
-                </DropdownListItem>
-                <DropdownListItem
-                  isSelected={selectedOption === "수험번호"}
-                  onClick={() => handleOptionSelect("수험번호")}
-                >
-                  수험번호
-                </DropdownListItem>
-              </DropdownList>
-            )}
+            {/* 드롭다운 메뉴는 Dropdown 내부 마지막에 위치 */}
+            <DropdownList style={{ display: isDropdownOpen ? "flex" : "none" }}>
+              <DropdownListItem
+                isSelected={selectedOption === "이름"}
+                onClick={() => handleOptionSelect("이름")}
+              >
+                이름
+              </DropdownListItem>
+              <DropdownListItem
+                isSelected={selectedOption === "수험번호"}
+                onClick={() => handleOptionSelect("수험번호")}
+              >
+                수험번호
+              </DropdownListItem>
+            </DropdownList>
           </CustomDropdown>
           <SearchInput
             type="text"
             placeholder="검색어를 입력하세요"
             value={localSearchTerm}
             onChange={(e) => setLocalSearchTerm(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleSearchClick();
+            }}}
           />
           <SearchButton onClick={handleSearchClick}>
             <SearchIcon src={searchicon} alt="search-icon" />

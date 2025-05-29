@@ -13,10 +13,20 @@ const TopBarContainer = styled.div`
 `;
 
 const Title = styled.h1`
-  color: var(--Gray-900, #222834);
-  font-size: 2.6rem;
-  font-weight: 700;
-  margin-left: 30px;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-left: 2rem;
+
+  @media (max-width: 1200px) {
+    font-size: 1.8rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-left: 0;
+  }
 `;
 
 const TopBarRight = styled.div`
@@ -29,28 +39,50 @@ const TopBarRight = styled.div`
 `;
 
 const ProfileName = styled.span`
-  font-size: 1.5rem;
-  color: var(--Gray-900, #222834);
-  width: 88px;
-  height: 30px;
+  font-size: 1.3rem;
+  color: #222834;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 3%;
-  gap: 0.1em;
+  gap: 0.3rem;
+  margin-right: 1rem;
+
+  @media (max-width: 1400px) {
+    font-size: 1.1rem;
+  }
+
+  @media (max-width: 1200px) {
+    font-size: 1rem;
+  }
+
+  @media (max-width: 1000px) {
+    font-size: 0.9rem;
+  }
 `;
 
+
 const LogoutButton = styled.button`
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   color: rgba(0, 0, 0, 0.7);
   border: none;
   background-color: transparent;
   cursor: pointer;
-  width: 120px;
-  height: 30px;
+
   &:hover {
     color: rgba(0, 0, 0, 1);
     font-weight: 600;
+  }
+
+  @media (max-width: 1400px) {
+    font-size: 1.1rem;
+  }
+
+  @media (max-width: 1200px) {
+    font-size: 1rem;
+  }
+
+  @media (max-width: 1000px) {
+    font-size: 0.9rem;
   }
 `;
 
@@ -76,7 +108,7 @@ function Header({ title }) {
       <Title>{title}</Title>
       <TopBarRight>
         <ProfileName>
-          {profileUsername ? `${profileUsername}` : "이름없음"}
+          {profileUsername ? `${profileUsername}` : "이재효"}
           <p style={{ color: "rgb(0,0,0,0.7)" }}>님</p>
         </ProfileName>
         <LogoutButton onClick={handleLogout}>로그아웃</LogoutButton>

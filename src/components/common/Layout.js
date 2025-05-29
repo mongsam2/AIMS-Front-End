@@ -5,17 +5,16 @@ export const Container = styled.div`
   flex-direction: row;
   width: 100%;
   height: 100vh;
-  overflow: hidden;
+  overflow-x: auto;
 `;
 
 export const MainContent = styled.div`
-  width: 100%; 
+  flex-grow: 1;
+  min-width: 1200px;
+  min-height: 700px;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  font-family: Arial, sans-serif;
-  gap: 0px;
-  justify-content: left;
   background-color: rgba(0, 0, 0, 0.04);
 `;
 

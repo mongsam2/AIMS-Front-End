@@ -7,73 +7,48 @@ import sort from "../../assets/sort.png";
 
 const TableContainer = styled.div`
   width: 100%;
-  height: 76%;
+  height: auto;
   overflow-x: auto;
-  overflow-y: auto;
   background-color: hwb(220 94% 2%);
 `;
 
 const ReviewTable = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 99.7%;
+  display: table;
+  width: 1200px; /* 고정 너비 최소 보장 */
+  min-width: 1000px;
   border-top: 2px solid rgba(30, 120, 255, 0.3);
   border-bottom: 2px solid rgba(30, 120, 255, 0.3);
 `;
 
 const TableHeader = styled.div`
-  display: flex;
-  justify-content: left;
-  align-items: center;
-  width: 100%;
-  background-color: #f2f2f2;
+  display: table-row;
   background-color: rgba(105, 188, 255, 0.25);
-  height: 6%;
-  border-bottom: 1px solid rgba(30, 120, 255, 0.3);
+  height: 60px;
 `;
 
 const TableCellHeader = styled.div`
-  width: ${({ width }) => width || "auto"};
-  height: 100%;
-  border-right: 1px solid rgba(30, 120, 255, 0.3);
-  box-sizing: border-box;
+  display: table-cell;
+  min-width: ${({ width }) => width || "100px"};
+  padding: 0 8px;
   font-weight: 600;
-  font-size: 1.44rem;
-  color: ${({ color }) => color || "rgba(0, 0, 0, 0.75)"};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: ${({ bgColor }) => bgColor || "#F7F9FCCC"};
+  font-size: 1.2rem;
+  color: rgba(0, 0, 0, 0.75);
+  white-space: nowrap; /* 줄바꿈 방지 */
+  text-align: center;
+  border-right: 1px solid rgba(30, 120, 255, 0.3);
   position: relative;
-
-  .sort-icon {
-    position: absolute;
-    right: 10px;
-  }
-
-  input.table-checkbox {
-    width: 100%;
-    height: 21%;
-  }
 `;
 
 const TableCell = styled.div`
-  width: ${({ width }) => width || "auto"};
-  height: 100%;
-  border-right: 1px solid rgba(222, 222, 222, 0.61);
-  box-sizing: border-box;
+  display: table-cell;
+  min-width: ${({ width }) => width || "100px"};
+  padding: 0 8px;
   font-weight: 500;
-  font-size: 1.44rem;
-  color: ${({ color }) => color || "rgba(0, 0, 0, 0.75)"};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: ${({ bgColor }) => bgColor || "white"};
-  input.table-checkbox {
-    width: 100%;
-    height: 21%;
-  }
+  font-size: 1.2rem;
+  color: rgba(0, 0, 0, 0.75);
+  text-align: center;
+  white-space: nowrap;
+  border-right: 1px solid rgba(222, 222, 222, 0.61);
 `;
 
 const TableBody = styled.div`
@@ -84,10 +59,10 @@ const TableBody = styled.div`
 `;
 
 const TableRow = styled.div`
-  display: flex;
+  display: table-row;
   background-color: ${({ isChecked }) => (isChecked ? "#d3e3fe" : "white")};
+  height: 55px;
   border-bottom: 1px solid rgba(222, 222, 222, 0.61);
-  height: 8.3%;
 `;
 
 const TableButton = styled.button`
