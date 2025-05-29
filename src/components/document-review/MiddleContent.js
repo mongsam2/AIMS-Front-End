@@ -93,7 +93,7 @@ const CustomDropdown = styled.div`
   background-color: white;
   color: rgba(0, 0, 0, 0.7);
   padding: 0 10px;
-  white-space: nowrap; /* ✅ 줄바꿈 방지 */
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   border-right: 1.5px solid rgba(0, 0, 0, 0.2);
@@ -470,58 +470,56 @@ function MiddleContent({ onSearchTermChange, onAdmissionTypeChange }) {
           </DropdownContainer>
         </LeftSection>
         <SearchContainer>
-          
-            {showReclassifyButton && (
-            <ReclassifyButton onClick={handleReclassifyClick}>
-              <img
-                style={{
-                  width: "1.8rem",
-                  height: "auto",
-                  marginRight: "1rem",
-                }}
-                src={alert}
-                alt="alert"
-              />
-              분류 실패 서류
-            </ReclassifyButton>
-            )}
-            <CustomDropdown onClick={toggleDropdown}>
-              <SelectedOptionText>{selectedOption}</SelectedOptionText>
-              <DropdownArrowImg
-                src={arrow_down}
-                alt="arrow_down"
-                isOpen={isDropdownOpen}
-              />
-              {/* 드롭다운 메뉴는 Dropdown 내부 마지막에 위치 */}
-              <DropdownList style={{ display: isDropdownOpen ? "flex" : "none" }}>
-                <DropdownListItem
-                  isSelected={selectedOption === "이름"}
-                  onClick={() => handleOptionSelect("이름")}
-                >
-                  이름
-                </DropdownListItem>
-                <DropdownListItem
-                  isSelected={selectedOption === "수험번호"}
-                  onClick={() => handleOptionSelect("수험번호")}
-                >
-                  수험번호
-                </DropdownListItem>
-              </DropdownList>
-            </CustomDropdown>
-            <SearchInput
-              type="text"
-              placeholder="검색어를 입력하세요"
-              value={localSearchTerm}
-              onChange={(e) => setLocalSearchTerm(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  handleSearchClick();
-              }}}
+          {showReclassifyButton && (
+          <ReclassifyButton onClick={handleReclassifyClick}>
+            <img
+              style={{
+                width: "1.8rem",
+                height: "auto",
+                marginRight: "1rem",
+              }}
+              src={alert}
+              alt="alert"
             />
-            <SearchButton onClick={handleSearchClick}>
-              <SearchIcon src={searchicon} alt="search-icon" />
-            </SearchButton>
-          
+            분류 실패 서류
+          </ReclassifyButton>
+          )}
+          <CustomDropdown onClick={toggleDropdown}>
+            <SelectedOptionText>{selectedOption}</SelectedOptionText>
+            <DropdownArrowImg
+              src={arrow_down}
+              alt="arrow_down"
+              isOpen={isDropdownOpen}
+            />
+            {/* 드롭다운 메뉴는 Dropdown 내부 마지막에 위치 */}
+            <DropdownList style={{ display: isDropdownOpen ? "flex" : "none" }}>
+              <DropdownListItem
+                isSelected={selectedOption === "이름"}
+                onClick={() => handleOptionSelect("이름")}
+              >
+                이름
+              </DropdownListItem>
+              <DropdownListItem
+                isSelected={selectedOption === "수험번호"}
+                onClick={() => handleOptionSelect("수험번호")}
+              >
+                수험번호
+              </DropdownListItem>
+            </DropdownList>
+          </CustomDropdown>
+          <SearchInput
+            type="text"
+            placeholder="검색어를 입력하세요"
+            value={localSearchTerm}
+            onChange={(e) => setLocalSearchTerm(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleSearchClick();
+            }}}
+          />
+          <SearchButton onClick={handleSearchClick}>
+            <SearchIcon src={searchicon} alt="search-icon" />
+          </SearchButton>
         </SearchContainer>
       </MiddleBar>
       {isPopupOpen && <ReclassifyPopUp onClose={handleClosePopup} />}
