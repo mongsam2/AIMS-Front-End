@@ -19,6 +19,7 @@ const shrinkExpand = keyframes`
 `;
 
 const MiddleBar = styled.div`
+  overflow: visible;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -61,7 +62,6 @@ const SearchGroup = styled.div`
   display: flex;
   border: 1.5px solid rgba(0, 0, 0, 0.2);
   border-radius: 10px;
-  overflow: hidden;
   height: 40px;
   position: relative;
   z-index: 1;
@@ -107,20 +107,20 @@ const CustomDropdown = styled.div`
 `;
 
 const DropdownList = styled.ul`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
   position: absolute;
-  top: 100%;
+  top: calc(100% + 4px);
   left: 0;
   width: 100%;
-  font-weight: 400;
+  max-height: 300px;
+  overflow-y: auto;
   background-color: white;
   border: 1px solid rgba(0, 0, 0, 0.2);
   list-style: none;
   margin: 0;
-  z-index: 9000;
-  height: 200%;
+  padding: 0;
+  z-index: 9999;
+  display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
+  flex-direction: column;
 `;
 
 const DropdownListItem = styled.li`
@@ -184,6 +184,7 @@ const SearchIcon = styled.img`
 `;
 
 const SearchTag = styled.div`
+  white-space: nowrap;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -212,6 +213,7 @@ const ClearButton = styled.button`
 `;
 
 const CustomDropdownContainer = styled.div`
+  flex-shrink: 0;
   position: relative;
   width: 220px;
   height: 40px;
@@ -468,7 +470,7 @@ function MiddleContent({ onSearchTermChange, onAdmissionTypeChange }) {
           </DropdownContainer>
         </LeftSection>
         <SearchContainer>
-          <SearchGroup>
+          
             {showReclassifyButton && (
             <ReclassifyButton onClick={handleReclassifyClick}>
               <img
@@ -515,7 +517,7 @@ function MiddleContent({ onSearchTermChange, onAdmissionTypeChange }) {
             <SearchButton onClick={handleSearchClick}>
               <SearchIcon src={searchicon} alt="search-icon" />
             </SearchButton>
-          </SearchGroup>
+          
         </SearchContainer>
       </MiddleBar>
       {isPopupOpen && <ReclassifyPopUp onClose={handleClosePopup} />}
