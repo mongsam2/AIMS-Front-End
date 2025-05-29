@@ -513,6 +513,10 @@ function MiddleContent({ onSearchTermChange, onAdmissionTypeChange }) {
               placeholder="검색어를 입력하세요"
               value={localSearchTerm}
               onChange={(e) => setLocalSearchTerm(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSearchClick();
+              }}}
             />
             <SearchButton onClick={handleSearchClick}>
               <SearchIcon src={searchicon} alt="search-icon" />
