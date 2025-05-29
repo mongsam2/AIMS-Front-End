@@ -13,17 +13,21 @@ const TableSelect = styled.div`
 
 const ButtonSet = styled.div`
   display: flex;
-  justify-content: left;
+  justify-content: space-between;
   align-items: center;
-  width: 15%;
-  height: 100%;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 400px;
   position: relative;
 `;
 
 const Button = styled.button`
+  flex: 1;
+  min-width: 100px;
+  margin: 0 4px;
   width: 33%;
   height: 100%;
-  font-size: 1.55rem;
+  font-size: 1.4rem;
   background-color: white;
   color: rgba(0, 0, 0, 0.4);
   font-weight: bold;
