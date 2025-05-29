@@ -15,12 +15,13 @@ const shrinkExpand = keyframes`
 `;
 
 const EvaluationContainer = styled.div`
-  width: 37%;
+  flex: 1 1 36%;
+  min-width: 400px;
+  max-width: 600px;
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: left;
   background-color: rgba(204, 232, 255, 0.25);
 `;
 
@@ -56,7 +57,7 @@ const EvaluationChooseButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.9rem;
+  font-size: 1.5rem; /* 이전: 1.9rem */
   font-weight: 600;
   cursor: pointer;
   position: relative;
@@ -95,13 +96,15 @@ const EvaluationSummaryBottomBox = styled.div`
 
 const StudentScoreEvaluation = styled.div`
   width: 90%;
-  height: 30%;
+  height: 26%;
   background-color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.08);
   flex-direction: row;
+  padding: 0.8rem;
+  border-radius: 10px;
 `;
 
 const EvaluationSummaryButton = styled.div`
@@ -140,12 +143,11 @@ const EvaluationSummaryAndQuestionText = styled.div`
   width: ${({ isInterview }) => (isInterview ? "90%" : "100%")};
   height: ${({ isInterview }) => (isInterview ? "85%" : "90%")};
   color: rgba(0, 0, 0, 0.7);
-  font-size: 1.8rem;
+  font-size: 1.4rem;
   font-weight: ${({ isInterview }) => (isInterview ? 515 : 500)};
   display: flex;
   justify-content: ${({ isInterview }) => (isInterview ? "left" : "left")};
-  align-items: left;
-  justify-content: left;
+  align-items: flex-start;
   flex-direction: column;
   gap: ${({ isInterview }) => (isInterview ? "0" : "5%")};
   overflow: auto;
@@ -163,8 +165,9 @@ const EvaluationSummaryAndQuestionText = styled.div`
   }
 
   &:hover::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.1); 
-    border-radius: 10px; 
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+  }
 `;
 
 const StudentRecordScoreText = styled.div`
@@ -333,7 +336,7 @@ const StudentRecordQuestionTextItem = styled.div`
   align-items: left;
   width: 100%;
   margin-bottom: 1rem;
-  font-size: 1.8rem;
+  font-size: 1.4rem;
 `;
 
 const CheckboxContainer = styled.div`
@@ -345,13 +348,8 @@ const CheckboxContainer = styled.div`
 `;
 
 const StudentRecordScorePageItemTitle = styled.div`
-  display: flex;
-  justify-content: left;
-  align-items: center;
-  width: 95%;
-  height: 23%;
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 1.4rem; /* 이전 1.6~2rem */
+  font-weight: 600;
 `;
 
 const CheckboxContainerBox = styled.div`
@@ -383,7 +381,7 @@ const StudentRecordScorePageItemText = styled.div`
   align-items: left;
   width: 100%;
   margin-bottom: 1rem;
-  font-size: 1.8rem;
+  font-size: 1.4rem;
 `;
 
 const StudentRecordScorePageItemTextSet = styled.div`
@@ -453,9 +451,9 @@ const EvaluationCategoryTitle = styled.h2`
 `;
 
 const StyledParagraph = styled.p`
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
-  color: rgba(0, 0, 0, 0.7);
+  font-size: 1.2rem; /* 이전 1.4~1.8rem */
+  margin-bottom: 0.6rem;
+  color: rgba(0, 0, 0, 0.65);
 `;
 
 const evaluationCategories = [

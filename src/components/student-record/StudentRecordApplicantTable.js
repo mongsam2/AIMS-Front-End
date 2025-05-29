@@ -3,7 +3,9 @@ import styled from "styled-components";
 import axios from "axios";
 
 const RecordTableContainer = styled.div`
-  width: 14%;
+  flex: 1 1 14%;
+  min-width: 160px;
+  max-width: 200px;
   height: 100%;
   background-color: rgba(185, 223, 255, 0.25);
   display: flex;

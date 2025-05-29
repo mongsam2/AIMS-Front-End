@@ -68,16 +68,17 @@ const EvaluationScoreChooseButton = styled.div`
 `;
 
 const EvaluationSummary = styled.div`
-  width: 90%;
-  height: 48%;
-  margin-bottom: 2%;
+  width: 85%;
+  height: ${({ isInterview }) => (isInterview ? "36%" : "28%")};
   background-color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.18);
-  flex-direction: column;
-  margin-bottom: 2rem;
+  flex-direction: row;
+  padding: 0.8rem;
+  border-radius: 10px;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.08);
+  margin: 0 auto; 
 `;
 
 const EvaluationSummaryTextBox = styled.div`

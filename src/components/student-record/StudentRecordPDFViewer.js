@@ -1,17 +1,15 @@
 import styled from "styled-components";
 
 const VisualizeStudentRecord = styled.div`
-  width: 48%;
+  flex: 1 1 48%;
+  min-width: 420px; 
+  max-width: 800px;
   height: 100%;
   background-color: #f9fafd;
-  color: rgba(0, 0, 0, 0.3);
-  font-size: 1.2rem;
-  font-weight: 500;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
-
 const VisualizeStudentRecordPDF = styled.iframe`
   width: 100%;
   height: 100%;

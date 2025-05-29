@@ -30,11 +30,13 @@ export const EssayTestContent = styled.div`
 export const StudentRecordContent = styled.div`
   display: flex;
   flex-direction: row;
+  flex-wrap: nowrap;
   justify-content: space-between;
-  align-items: center;
+  align-items: stretch;
   width: 100%;
   height: 94%;
   background-color: white;
+  overflow-x: auto;
 `;
 
 export const MainPageContainer = styled.div`
