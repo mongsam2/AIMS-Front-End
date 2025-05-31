@@ -24,52 +24,44 @@ const AdminInfo = styled.p`
 const MainInfoContainerTextSet = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   width: 97%;
   height: 20%;
   gap: 2rem;
 `;
 
 const MainInfoContainerText = styled.div`
-  color: rgba(0, 0, 0, 1);
-  margin: 0;
-  font-size: 2.8rem;
+  color: #000;
+  font-size: clamp(20px, 2vw, 32px);
   font-weight: bold;
-  width: 97%;
-  height: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 100%;
+  text-align: center;
 `;
 
 const MainInfoContainerEssayText = styled.div`
   color: rgb(255, 90, 90);
   margin-top: 0.5rem;
-  font-size: 1.6rem;
+  font-size: clamp(15px, 2vw, 22px);
   font-weight: bold;
-  width: 97%;
-  height: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 100%;
+  text-align: center;
 `;
 
 const MainContainerEssayCriteria = styled.div`
   display: flex;
-  flex-direction: row;
-  justify-content: right;
+  justify-content: center;
   align-items: center;
   width: 97%;
-  height: 5%;
-  margin-right: 33rem;
+  height: auto;
+  margin-bottom: 2rem;
 `;
 
 const CriteriaSelectContainer = styled.div`
   position: relative;
-  width: 20rem;
-  height: 3rem;
-  font-size: 1.5rem;
+  width: clamp(160px, 15vw, 280px);
+  height: clamp(15px, 15vw, 42px);
+  font-size: clamp(0.9rem, 1.2vw, 1,2rem);
   font-weight: bold;
   border: 3px solid #ccc;
   border-radius: 0.5rem;
@@ -78,6 +70,7 @@ const CriteriaSelectContainer = styled.div`
   justify-content: center;
   align-items: center;
   color: rgba(0, 0, 0, 0.8);
+  margin-top: 10px;
 `;
 
 const CriteriaSelectList = styled.ul`
@@ -123,25 +116,31 @@ const ArrowIcon = styled.img`
 
 const MainContainerContentChoice = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-wrap: nowrap;
   justify-content: center;
   align-items: center;
   width: 97%;
-  height: 60%;
-  gap: 6%;
+  gap: clamp(1rem, 4vw, 4rem);
+  overflow-x: auto;
+  padding-bottom: 1rem;
 `;
 
 const MainContainerContentChoiceItem = styled.div`
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: none;
-  width: 20%;
-  height: 90%;
-  gap: 1rem;
+  min-width: 200px;
+  min-height: 220px;
+  width: clamp(200px, 22vw, 240px);
+  height: clamp(220px, 28vh, 280px);
+  padding: 1.2rem;
+  gap: clamp(0.8rem, 2vh, 1.5rem);
   border-radius: 2rem;
   cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
 
   &:hover {
     background-color: #a9d1f8;
@@ -150,29 +149,22 @@ const MainContainerContentChoiceItem = styled.div`
 
   &:active {
     transform: scale(0.95);
-    transition: transform 0.1s ease;
   }
 `;
 
-const MainContainerContentChoiceItemLine = styled.div`
-  width: 1px;
-  height: 40%;
-  background-color: #3c50aa;
-`;
-
 const MainPageItemIcon = styled.img`
-  width: 75%;
-  height: 55%;
-  margin-bottom: 10%;
+  width: 60%;
+  height: auto;
 `;
 
 const MainPageItemText = styled.p`
   color: rgba(0, 0, 0, 0.8);
   font-weight: bold;
-  font-size: 2.5rem;
+  font-size: clamp(1rem, 1.6vw, 1.5rem);
+  margin: 0;
 `;
 
-function AdminPageContentElement({}) {
+function AdminPageContentElement() {
   const [uploadMessage, setUploadMessage] = useState("");
   const [messageColor, setMessageColor] = useState("blue");
   const [criteriaList, setCriteriaList] = useState([]);
@@ -180,136 +172,66 @@ function AdminPageContentElement({}) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
-    const fetchCriteria = async () => {
-      try {
-        const response = await axios.get(
-          "http://3.37.240.199/api/essays/criterias/"
-        );
-        setCriteriaList(response.data);
-      } catch (error) {
-        console.error("Error fetching criteria:", error);
-      }
-    };
-
-    fetchCriteria();
+    axios
+      .get("http://3.37.240.199/api/essays/criterias/")
+      .then((res) => setCriteriaList(res.data))
+      .catch((err) => console.error("Error fetching criteria:", err));
   }, []);
 
-  const handleDocumentReviewClick = () => {
-    const inputElement = document.getElementById("document-upload");
-    inputElement.click();
-    inputElement.onchange = async (event) => {
-      const file = event.target.files[0];
-      if (file) {
-        const formData = new FormData();
-        formData.append("file", file);
+  const triggerFileUpload = (id, callback) => {
+    const input = document.getElementById(id);
+    input.click();
+    input.onchange = callback;
+  };
 
-        try {
-          const response = await axios.post(
-            "http://3.37.240.199/api/documents/",
-            formData
-          );
+  const uploadFile = async (url, file, extra = {}) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    for (const key in extra) {
+      formData.append(key, extra[key]);
+    }
 
-          if (response.status !== 201) {
-            throw new Error("파일 업로드 실패");
-          }
-          setUploadMessage("파일이 업로드 되었습니다.");
-          setMessageColor("blue");
-        } catch (error) {
-          console.error("Error:", error);
-          setUploadMessage("파일 업로드 중 오류가 발생했습니다.");
-          setMessageColor("red");
-        } finally {
-          setTimeout(() => {
-            setUploadMessage("");
-          }, 9000);
-        }
+    try {
+      const res = await axios.post(url, formData);
+      if (res.status !== 201) throw new Error("업로드 실패");
+      setUploadMessage("파일이 업로드 되었습니다.");
+      setMessageColor("blue");
+    } catch (err) {
+      console.error(err);
+      if (err.response?.status === 406) {
+        setUploadMessage("이미 제출한 지원자의 파일이 포함되어있습니다.");
+      } else {
+        setUploadMessage("파일 업로드 중 오류가 발생했습니다.");
       }
-    };
+      setMessageColor("red");
+    } finally {
+      setTimeout(() => setUploadMessage(""), 9000);
+    }
   };
 
-  const handleStudentRecordClick = () => {
-    const inputElement = document.getElementById("student-record-upload");
-    inputElement.click();
-    inputElement.onchange = async (event) => {
-      const file = event.target.files[0];
-      if (file) {
-        const formData = new FormData();
-        formData.append("file", file);
-
-        try {
-          const response = await axios.post(
-            "http://3.37.240.199/api/student-records/",
-            formData
-          );
-
-          if (response.status !== 201) {
-            throw new Error("파일 업로드 실패");
-          }
-          setUploadMessage("파일이 업로드 되었습니다.");
-          setMessageColor("blue");
-        } catch (error) {
-          console.error("Error:", error);
-          if (error.response && error.response.status === 406) {
-            setUploadMessage("이미 제출한 지원자의 파일이 포함되어있습니다.");
-            setMessageColor("red");
-          } else {
-            setUploadMessage("파일 업로드 중 오류가 발생했습니다.");
-            setMessageColor("red");
-          }
-        } finally {
-          setTimeout(() => {
-            setUploadMessage("");
-          }, 9000);
-        }
-      }
-    };
+  const handleDocumentUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) uploadFile("http://3.37.240.199/api/documents/", file);
   };
 
-  const handleEssayTestClick = () => {
-    document.getElementById("essay-upload").click();
+  const handleStudentRecordUpload = (e) => {
+    const file = e.target.files[0];
+    if (file)
+      uploadFile("http://3.37.240.199/api/student-records/", file);
   };
 
-  const handleEssayUpload = async (event) => {
-    const file = event.target.files[0];
+  const handleEssayUpload = (e) => {
+    const file = e.target.files[0];
     if (!selectedCriteria) {
       setUploadMessage("논술 평가 기준을 선택해주세요.");
       setMessageColor("red");
-      setTimeout(() => {
-        setUploadMessage("");
-      }, 6000);
+      setTimeout(() => setUploadMessage(""), 6000);
       return;
     }
-    if (file) {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("criteria", selectedCriteria);
-
-      try {
-        const response = await axios.post(
-          "http://3.37.240.199/api/essays/",
-          formData
-        );
-
-        if (response.status !== 201) {
-          throw new Error("파일 업로드 실패");
-        }
-        setUploadMessage("파일이 업로드 되었습니다.");
-        setMessageColor("blue");
-      } catch (error) {
-        console.error("Error:", error);
-        setUploadMessage("파일 업로드 중 오류가 발생했습니다.");
-        setMessageColor("red");
-      } finally {
-        setTimeout(() => {
-          setUploadMessage("");
-        }, 9000);
-      }
-    }
-  };
-
-  const handleCriteriaSelect = (criteriaId) => {
-    setSelectedCriteria(criteriaId);
-    setIsDropdownOpen(false);
+    if (file)
+      uploadFile("http://3.37.240.199/api/essays/", file, {
+        criteria: selectedCriteria,
+      });
   };
 
   return (
@@ -318,89 +240,61 @@ function AdminPageContentElement({}) {
         <AdminInfo>어드민님</AdminInfo>
       </MainContainerInfoTop>
       <MainInfoContainerTextSet>
-        <MainInfoContainerText>
-          업로드 할 파일을 선택해주세요
-        </MainInfoContainerText>
+        <MainInfoContainerText>업로드 할 파일을 선택해주세요</MainInfoContainerText>
         <MainInfoContainerEssayText>
           논술 답안지 업로드 시 논술 평가 기준을 먼저 선택해주세요
         </MainInfoContainerEssayText>
       </MainInfoContainerTextSet>
       <MainContainerEssayCriteria>
-        <CriteriaSelectContainer
-          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-        >
+        <CriteriaSelectContainer onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
           <span>
             {selectedCriteria
               ? criteriaList.find((c) => c.id === selectedCriteria)?.title
               : "평가 기준을 선택하세요"}
           </span>
-          <ArrowIcon
-            isopen={isDropdownOpen}
-            src={arrow_down}
-            alt="드롭다운 화살표"
-          />
+          <ArrowIcon isopen={isDropdownOpen} src={arrow_down} alt="arrow" />
           {isDropdownOpen && (
             <CriteriaSelectList>
-              {criteriaList.map((criteria) => (
+              {criteriaList.map((c) => (
                 <CriteriaSelectListItem
-                  key={criteria.id}
-                  isSelected={criteria.id === selectedCriteria}
+                  key={c.id}
+                  isSelected={c.id === selectedCriteria}
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleCriteriaSelect(criteria.id);
+                    setSelectedCriteria(c.id);
+                    setIsDropdownOpen(false);
                   }}
                 >
-                  {criteria.title}
+                  {c.title}
                 </CriteriaSelectListItem>
               ))}
             </CriteriaSelectList>
           )}
         </CriteriaSelectContainer>
       </MainContainerEssayCriteria>
+
       <MainContainerContentChoice>
-        <MainContainerContentChoiceItem onClick={handleDocumentReviewClick}>
-          <input
-            type="file"
-            id="document-upload"
-            multiple
-            style={{ display: "none" }}
-          />
-          <MainPageItemIcon src={icon2} alt="icon" />
+        <MainContainerContentChoiceItem onClick={() => triggerFileUpload("document-upload", handleDocumentUpload)}>
+          <input id="document-upload" type="file" multiple style={{ display: "none" }} />
+          <MainPageItemIcon src={icon2} alt="document" />
           <MainPageItemText>입학 서류 업로드</MainPageItemText>
         </MainContainerContentChoiceItem>
-        <MainContainerContentChoiceItemLine />
-        <MainContainerContentChoiceItem onClick={handleStudentRecordClick}>
-          <input
-            type="file"
-            id="student-record-upload"
-            multiple
-            style={{ display: "none" }}
-          />
-          <MainPageItemIcon src={icon1} alt="icon" />
+
+        <MainContainerContentChoiceItem onClick={() => triggerFileUpload("student-record-upload", handleStudentRecordUpload)}>
+          <input id="student-record-upload" type="file" multiple style={{ display: "none" }} />
+          <MainPageItemIcon src={icon1} alt="record" />
           <MainPageItemText>생활기록부 업로드</MainPageItemText>
         </MainContainerContentChoiceItem>
-        <MainContainerContentChoiceItemLine />
-        <MainContainerContentChoiceItem onClick={handleEssayTestClick}>
-          <input
-            type="file"
-            id="essay-upload"
-            multiple
-            style={{ display: "none" }}
-            onChange={handleEssayUpload}
-          />
-          <MainPageItemIcon src={icon3} alt="icon" />
+
+        <MainContainerContentChoiceItem onClick={() => triggerFileUpload("essay-upload", handleEssayUpload)}>
+          <input id="essay-upload" type="file" multiple style={{ display: "none" }} />
+          <MainPageItemIcon src={icon3} alt="essay" />
           <MainPageItemText>논술 답안지 업로드</MainPageItemText>
         </MainContainerContentChoiceItem>
       </MainContainerContentChoice>
 
       {uploadMessage && (
-        <p
-          style={{
-            color: messageColor,
-            fontSize: "1.8rem",
-            marginTop: "0.5rem",
-          }}
-        >
+        <p style={{ color: messageColor, fontSize: "1.8rem", marginTop: "0.5rem" }}>
           {uploadMessage}
         </p>
       )}
