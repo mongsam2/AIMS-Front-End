@@ -59,9 +59,9 @@ const MainContainerEssayCriteria = styled.div`
 
 const CriteriaSelectContainer = styled.div`
   position: relative;
-  width: clamp(160px, 18vw, 270px);
-  height: 3rem;
-  font-size: clamp(1rem, 1.5vw, 1.5rem);
+  width: clamp(160px, 15vw, 280px);
+  height: clamp(15px, 15vw, 42px);
+  font-size: clamp(0.9rem, 1.2vw, 1,2rem);
   font-weight: bold;
   border: 3px solid #ccc;
   border-radius: 0.5rem;
@@ -70,6 +70,7 @@ const CriteriaSelectContainer = styled.div`
   justify-content: center;
   align-items: center;
   color: rgba(0, 0, 0, 0.8);
+  margin-top: 10px;
 `;
 
 const CriteriaSelectList = styled.ul`
