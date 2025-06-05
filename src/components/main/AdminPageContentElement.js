@@ -219,16 +219,15 @@ function AdminPageContentElement() {
     if (!file) return;
 
     try {
-      // 1. presigned URL 요청
-      const presignRes = await axios.post("http://localhost:8000/api/aws/presigned-url/", {
+      const { data } = await axios.post("http://localhost:8000/api/aws/presigned-url/", {
         file_type: file.type,
         type: "student_record",
       });
 
-      const { url, key } = presignRes.data;
+      const { url } = data;
+      if (!url) throw new Error("Presigned URL이 없습니다");
 
-      // 2. S3로 파일 업로드 (PUT 요청)
-      const uploadRes = await axios.put(`${url}${key}`, file, {
+      const uploadRes = await axios.put(url, file, {
         headers: {
           "Content-Type": file.type,
         },
@@ -239,7 +238,7 @@ function AdminPageContentElement() {
       setUploadMessage("파일이 업로드 되었습니다.");
       setMessageColor("blue");
     } catch (err) {
-      console.error(err);
+      console.error("S3 업로드 오류:", err);
       setUploadMessage("파일 업로드 중 오류가 발생했습니다.");
       setMessageColor("red");
     } finally {
