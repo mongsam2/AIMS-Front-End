@@ -213,10 +213,37 @@ function AdminPageContentElement() {
     if (file) uploadFile("http://3.37.240.199/api/documents/", file);
   };
 
-  const handleStudentRecordUpload = (e) => {
+  const handleStudentRecordUpload = async (e) => {
     const file = e.target.files[0];
-    if (file)
-      uploadFile("http://3.37.240.199/api/student-records/", file);
+    if (!file) return;
+
+    try {
+      // 1. presigned URL 요청
+      const presignRes = await axios.post("http://localhost:8000/api/aws/presigned-url/", {
+        file_type: file.type,
+        type: "student_record",
+      });
+
+      const { url, key } = presignRes.data;
+
+      // 2. S3로 파일 업로드 (PUT 요청)
+      const uploadRes = await axios.put(`${url}${key}`, file, {
+        headers: {
+          "Content-Type": file.type,
+        },
+      });
+
+      if (uploadRes.status !== 200) throw new Error("S3 업로드 실패");
+
+      setUploadMessage("파일이 업로드 되었습니다.");
+      setMessageColor("blue");
+    } catch (err) {
+      console.error(err);
+      setUploadMessage("파일 업로드 중 오류가 발생했습니다.");
+      setMessageColor("red");
+    } finally {
+      setTimeout(() => setUploadMessage(""), 9000);
+    }
   };
 
   const handleEssayUpload = (e) => {
