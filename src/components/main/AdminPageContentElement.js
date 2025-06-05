@@ -170,6 +170,7 @@ function AdminPageContentElement() {
   const [criteriaList, setCriteriaList] = useState([]);
   const [selectedCriteria, setSelectedCriteria] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     axios
@@ -180,8 +181,15 @@ function AdminPageContentElement() {
 
   const triggerFileUpload = (id, callback) => {
     const input = document.getElementById(id);
+    
+    // 기존 이벤트 리셋
+    input.value = ""; // 파일 선택 기록 초기화
+    input.onchange = (e) => {
+      callback(e);
+      input.value = ""; // 다시 같은 파일 선택해도 작동되도록 초기화
+    };
+
     input.click();
-    input.onchange = callback;
   };
 
   const uploadFile = async (url, file, extra = {}) => {
@@ -190,6 +198,8 @@ function AdminPageContentElement() {
     for (const key in extra) {
       formData.append(key, extra[key]);
     }
+
+    setIsUploading(true);
 
     try {
       const res = await axios.post(url, formData);
@@ -205,6 +215,7 @@ function AdminPageContentElement() {
       }
       setMessageColor("red");
     } finally {
+      setIsUploading(false);
       setTimeout(() => setUploadMessage(""), 9000);
     }
   };
@@ -218,46 +229,147 @@ function AdminPageContentElement() {
     const file = e.target.files[0];
     if (!file) return;
 
+    setIsUploading(true);
+
     try {
-      const { data } = await axios.post("http://localhost:8000/api/aws/presigned-url/", {
+      const filenameWithoutExt = file.name.split(".")[0];
+      const [student_id, student_name, department, application_type] = filenameWithoutExt.split("_");
+
+      if (!student_id || !student_name || !department || !application_type) {
+        throw new Error("파일명에서 학생 정보를 추출할 수 없습니다.");
+      }
+      // STEP 1: S3 Presigned URL 요청
+      const presignRes = await axios.post("http://localhost:8000/api/aws/presigned-url/", {
         file_type: file.type,
         type: "student_record",
       });
+      const s3Url = presignRes.data.url;
 
-      const { url } = data;
-      if (!url) throw new Error("Presigned URL이 없습니다");
-
-      const uploadRes = await axios.put(url, file, {
-        headers: {
-          "Content-Type": file.type,
-        },
+      // STEP 2: S3에 파일 업로드
+      await axios.put(s3Url, file, {
+        headers: { "Content-Type": file.type },
       });
 
-      if (uploadRes.status !== 200) throw new Error("S3 업로드 실패");
+      const s3FilePath = s3Url.split("?")[0]; // presigned url에서 실제 S3 경로 추출
 
-      setUploadMessage("파일이 업로드 되었습니다.");
-      setMessageColor("blue");
+      // STEP 3: OCR API 요청
+      const ocrForm = new FormData();
+      ocrForm.append("document", file);
+      ocrForm.append("schema", "oac");
+      ocrForm.append("model", "ocr-2.2.1");
+
+      const ocrResponse = await fetch("https://api.upstage.ai/v1/document-digitization", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer up_iEOr12RdbUKiMyAU2wI8OzrTfjOTk`, // API 키 입력
+        },
+        body: ocrForm,
+      });
+
+      const ocrData = await ocrResponse.json();
+      const extractedText = ocrData.text;
+
+      // STEP 4: student_record 백엔드로 POST
+      const studentRecordPayload = {
+        student_id,
+        student_name,
+        department,
+        application_type,
+        ocr_text: extractedText,
+        file: s3FilePath,
+        evaluation_category_id: 1,
+      };
+
+      const recordRes = await axios.post("http://localhost:8000/api/v2/student-records/", studentRecordPayload);
+
+      if (recordRes.status === 201 || recordRes.status === 200) {
+        setUploadMessage("생활기록부 업로드 및 분석이 완료되었습니다.");
+        setMessageColor("blue");
+      } else {
+        throw new Error("학생 기록 등록 실패");
+      }
     } catch (err) {
-      console.error("S3 업로드 오류:", err);
-      setUploadMessage("파일 업로드 중 오류가 발생했습니다.");
+      console.error("오류 발생:", err);
+      setUploadMessage("OCR 또는 업로드 중 오류가 발생했습니다.");
       setMessageColor("red");
     } finally {
+      setIsUploading(false);
       setTimeout(() => setUploadMessage(""), 9000);
     }
   };
 
-  const handleEssayUpload = (e) => {
+  const handleEssayUpload = async (e) => {
     const file = e.target.files[0];
-    if (!selectedCriteria) {
-      setUploadMessage("논술 평가 기준을 선택해주세요.");
-      setMessageColor("red");
-      setTimeout(() => setUploadMessage(""), 6000);
-      return;
-    }
-    if (file)
-      uploadFile("http://3.37.240.199/api/essays/", file, {
-        criteria: selectedCriteria,
+    if (!file) return;
+
+    setIsUploading(true);
+
+    try {
+      // 파일명 예: 20250001_송재현_인공지능학과_생기부(면접형)_논술.pdf
+      const filenameWithoutExt = file.name.split(".")[0];
+      const [student_id, student_name, department, application_type] = filenameWithoutExt.split("_");
+
+      if (!student_id || !student_name || !department || !application_type) {
+        throw new Error("파일명에서 학생 정보를 추출할 수 없습니다.");
+      }
+
+      // STEP 1: S3 Presigned URL 요청
+      const presignRes = await axios.post("http://localhost:8000/api/aws/presigned-url/", {
+        file_type: file.type,
+        type: "essay",
       });
+      const s3Url = presignRes.data.url;
+      const s3FilePath = s3Url.split("?")[0];
+
+      // STEP 2: S3에 업로드
+      await axios.put(s3Url, file, {
+        headers: { "Content-Type": file.type },
+      });
+
+      // STEP 3: OCR 요청
+      const ocrForm = new FormData();
+      ocrForm.append("document", file);
+      ocrForm.append("schema", "oac");
+      ocrForm.append("model", "ocr-2.2.1");
+
+      const ocrResponse = await fetch("https://api.upstage.ai/v1/document-digitization", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer up_iEOr12RdbUKiMyAU2wI8OzrTfjOTk`, // 여기에 실제 API 키 입력
+        },
+        body: ocrForm,
+      });
+
+      const ocrData = await ocrResponse.json();
+      const extractedText = ocrData.text;
+
+      // STEP 4: 백엔드로 POST 요청
+      const essayPayload = {
+        student_id,
+        student_name,
+        department,
+        application_type,
+        ocr_text: extractedText,
+        file: s3FilePath,
+        evaluation_category_id: 1,
+      };
+
+      const res = await axios.post("http://localhost:8000/api/v2/essays/", essayPayload);
+
+      if (res.status === 201 || res.status === 200) {
+        setUploadMessage("논술 업로드 및 분석이 완료되었습니다.");
+        setMessageColor("blue");
+      } else {
+        throw new Error("논술 등록 실패");
+      }
+    } catch (err) {
+      console.error("논술 업로드 오류:", err);
+      setUploadMessage("논술 업로드 중 오류가 발생했습니다.");
+      setMessageColor("red");
+    } finally {
+      setIsUploading(false);
+      setTimeout(() => setUploadMessage(""), 9000);
+    }
   };
 
   return (
@@ -318,6 +430,12 @@ function AdminPageContentElement() {
           <MainPageItemText>논술 답안지 업로드</MainPageItemText>
         </MainContainerContentChoiceItem>
       </MainContainerContentChoice>
+      
+      {isUploading && (
+        <p style={{ color: "black", fontSize: "1.6rem", marginTop: "0.5rem" }}>
+          파일 업로드 및 AI 판독 중...
+        </p>
+      )}
 
       {uploadMessage && (
         <p style={{ color: messageColor, fontSize: "1.8rem", marginTop: "0.5rem" }}>
